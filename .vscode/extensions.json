@@ -1,0 +1,11 @@
+{
+  "recommendations": [
+    "msjsdiag.vscode-react-native",
+    "dannark.androidlauncher",
+    "gruntfuggly.todo-tree",
+    "nucllear.vscode-extension-auto-import",
+    "zachflower.uncrustify",
+    "redhat.vscode-xml",
+    "dbaeumer.vscode-eslint"
+  ]
+}

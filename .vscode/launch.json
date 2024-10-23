@@ -1,0 +1,118 @@
+{
+  // Use IntelliSense to learn about possible attributes.
+  // Hover to view descriptions of existing attributes.
+  // For more information, visit: https://go.microsoft.com/fwlink/?linkid=830387
+  "version": "0.2.0",
+  "configurations": [
+    {
+      "name": "Droid - Run Android",
+      "cwd": "${workspaceFolder}",
+      "type": "reactnative",
+      "request": "launch",
+      "platform": "android",
+      "enableDebug": false,
+      "runArguments": ["--active-arch-only"]
+    },
+    {
+      "name": "Droid - Debug Android",
+      "cwd": "${workspaceFolder}",
+      "type": "reactnative",
+      "request": "launch",
+      "platform": "android",
+      "runArguments": ["--active-arch-only"]
+    },
+    {
+      "name": "Droid - Run Android Hermes",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "enableDebug": false,
+      "platform": "android",
+      "runArguments": ["--active-arch-only"]
+    },
+    {
+      "name": "Droid - Debug Android Hermes",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "platform": "android",
+      "runArguments": ["--active-arch-only"]
+    },
+
+    {
+      "name": "iOS - Run iOS",
+      "cwd": "${workspaceFolder}",
+      "type": "reactnative",
+      "request": "launch",
+      "platform": "ios",
+      "enableDebug": false,
+      "target": "iPhone 15 Pro"
+    },
+    {
+      "name": "iOS - Debug iOS",
+      "cwd": "${workspaceFolder}",
+      "type": "reactnative",
+      "request": "launch",
+      "platform": "ios",
+      "target": "iPhone 15 Pro"
+    },
+    {
+      "name": "iOS - Run iOS Hermes",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "enableDebug": false,
+      "platform": "ios",
+      "target": "iPhone 15 Pro"
+    },
+    {
+      "name": "iOS - Debug iOS Hermes",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "platform": "ios",
+      "target": "iPhone 15 Pro"
+    },
+
+    {
+      "name": "iOS - Run iOS Hermes - Device",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "enableDebug": false,
+      "platform": "ios",
+      "target": "device"
+    },
+    {
+      "name": "iOS - Debug iOS Hermes - Device",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "platform": "ios",
+      "target": "device"
+    },
+
+    {
+      "name": "iOS - (Deploy) - Run iOS Hermes - iPad Air",
+      "request": "launch",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}",
+      "enableDebug": false,
+      "platform": "ios",
+      "target": "iPad Air (5th generation)"
+    },
+
+    {
+      "name": "Attach to packager",
+      "request": "attach",
+      "type": "reactnative",
+      "cwd": "${workspaceFolder}"
+    },
+    {
+      "name": "Attach to Hermes application",
+      "request": "attach",
+      "type": "reactnativedirect",
+      "cwd": "${workspaceFolder}"
+    }
+  ]
+}

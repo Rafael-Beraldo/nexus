@@ -1,0 +1,13 @@
+{
+  "Componente Funcional - Estilo": {
+    "scope": "javascript,typescript",
+    "prefix": "compfuncstyle",
+    "body": [
+      "import {StyleSheet} from 'react-native';",
+      "",
+      "export default StyleSheet.create({});",
+      ""
+    ],
+    "description": "Criar o estilo do componente funcional."
+  }
+}
