@@ -36,7 +36,6 @@ const HomePage = () => {
       <div className={commonStyles.center}>
         <div className={commonStyles.width_70}>
           <div>
-            <p>AAAAAA</p>
             <Carousel banners />
           </div>
           <div>

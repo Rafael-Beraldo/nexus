@@ -1,16 +1,14 @@
 import React, { useState } from "react";
-
+import { useNavigate } from "react-router-dom";
 import { ShoppingCart, Person } from "@mui/icons-material";
 import Badge from "@mui/material/Badge";
-
 import "./style.css";
 import commonStyles from "../../styles/commonStyles.module.css";
 import Input from "../Input";
 
-// import logo from "./assets/logo.png";
-
 const Header = () => {
   const [cartItems, setCartItems] = useState(0);
+  const navigate = useNavigate();
 
   return (
     <header className="header">
@@ -40,7 +38,10 @@ const Header = () => {
               style={{ width: 35, height: 35, cursor: "pointer" }}
             />
           </Badge>
-          <Person style={{ width: 35, height: 35, cursor: "pointer" }} />
+          <Person
+            style={{ width: 35, height: 35, cursor: "pointer" }}
+            onClick={() => navigate("/user")}
+          />
         </div>
       </div>
     </header>
