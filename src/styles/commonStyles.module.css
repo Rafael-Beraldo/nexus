@@ -5,3 +5,13 @@
   align-items: center;
   height: 15vh;
 }
+
+.center {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.width_70 {
+  width: 70%;
+}

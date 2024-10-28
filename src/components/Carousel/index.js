@@ -1,11 +1,16 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+
 import "./style.css";
+
 import Slider from "react-slick";
 import "slick-carousel/slick/slick.css";
 import "slick-carousel/slick/slick-theme.css";
+
 import Product from "../Product";
 
-const Carousel = ({ products }) => {
+const Carousel = (props) => {
+  const [loading, setLoading] = useState(true);
+
   const settings = {
     centerMode: true,
     centerPadding: "40px",
@@ -23,17 +28,36 @@ const Carousel = ({ products }) => {
     ],
   };
 
+  useEffect(() => {
+    if (props.products || props.banners) {
+      setLoading(false);
+    }
+  }, [props.products]);
+
+  const ProductsComponent = () => {
+    return (
+      <div style={{ padding: "40px" }}>
+        <Slider {...settings}>
+          {props.products.map((product) => (
+            <div key={product.id} className="slide">
+              <Product product={product} />
+            </div>
+          ))}
+        </Slider>
+      </div>
+    );
+  };
+
   return (
-    <div style={{ padding: "40px" }}>
-      <Slider {...settings}>
-        {products.map((product) => (
-          <div className="slide" key={product.id}>
-            {" "}
-            <Product product={product} />{" "}
-          </div>
-        ))}
-      </Slider>
-    </div>
+    <>
+      {loading ? (
+        <div className="loading">
+          <div className="loader">Carregando...</div>
+        </div>
+      ) : props.products?.length > 0 ? (
+        <ProductsComponent />
+      ) : null}
+    </>
   );
 };
 

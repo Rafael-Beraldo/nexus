@@ -44,5 +44,10 @@ body {
   background-color: #b069f1;
   border-radius: 10px;
   font-weight: bold;
+  margin-top: 10px;
   color: #ffffff;
+}
+
+.btnAddToCart:hover {
+  cursor: pointer;
 }
