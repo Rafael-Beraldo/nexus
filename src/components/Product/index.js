@@ -12,7 +12,7 @@ const Product = (props) => {
   const { image, title, price, id } = props.product;
 
   const truncateTitle = (title) => {
-    return title.length > 25 ? `${title.slice(0, 15)}...` : title;
+    return title.length > 15 ? `${title.slice(0, 12)}...` : title;
   };
 
   const addToCart = async () => {

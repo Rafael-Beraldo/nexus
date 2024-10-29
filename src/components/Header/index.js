@@ -6,7 +6,7 @@ import "./style.css";
 import commonStyles from "../../styles/commonStyles.module.css";
 import Input from "../Input";
 
-const Header = () => {
+const Header = ({ onSearch }) => { // Recebe a função onSearch como prop
   const [cartItems, setCartItems] = useState(0);
   const navigate = useNavigate();
 
@@ -23,7 +23,7 @@ const Header = () => {
           </div>
         </div>
         <div className="big-column">
-          <Input placeholder="Pesquisar..." />
+          <Input placeholder="Pesquisar..." onSearch={onSearch} /> {/* Passa a função aqui */}
         </div>
         <div
           className="small-column"

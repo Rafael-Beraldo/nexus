@@ -15,3 +15,14 @@
 .width_70 {
   width: 70%;
 }
+
+.productList {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.productItem {
+  flex: 0 0 calc(20% - 10px); 
+  margin-bottom: 20px;
+}
