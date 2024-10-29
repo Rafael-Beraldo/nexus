@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./UserPage.css";
 
 const UserPage = () => {
@@ -80,7 +80,12 @@ const UserPage = () => {
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <div><ArrowBackIcon style={{ width: 35, height: 35, cursor: "pointer" }} onClick={() => navigate(-1)} /></div>
+        <div>
+          <ArrowBackIcon
+            style={{ width: 35, height: 35, cursor: "pointer" }}
+            onClick={() => navigate(-1)}
+          />
+        </div>
       </div>
       <div className="profile-wraper">
         <h1>Ficha do Usuário:</h1>
@@ -149,7 +154,8 @@ const UserPage = () => {
           ) : (
             <>
               <p>
-                <strong>Nome:</strong> {user.name.firstname} {user.name.lastname}
+                <strong>Nome:</strong> {user.name.firstname}{" "}
+                {user.name.lastname}
               </p>
               <p>
                 <strong>Endereço:</strong> {user.address.street},{" "}

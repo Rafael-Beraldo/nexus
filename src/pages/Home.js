@@ -7,8 +7,8 @@ import Product from "../components/Product";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); 
-  
+  const [searchTerm, setSearchTerm] = useState("");
+
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -27,7 +27,7 @@ const HomePage = () => {
     setSearchTerm(term);
   };
 
-  const filteredProducts = products.filter(product =>
+  const filteredProducts = products.filter((product) =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
 
@@ -45,11 +45,11 @@ const HomePage = () => {
           {filteredProducts.length > 0 ? (
             <>
               <div className={commonStyles.productList}>
-                {filteredProducts.map(product => (
-                    <div key={product.id} className={commonStyles.productItem}>
-                      <Product product={product} />
-                    </div>
-                  ))}
+                {filteredProducts.map((product) => (
+                  <div key={product.id} className={commonStyles.productItem}>
+                    <Product product={product} />
+                  </div>
+                ))}
               </div>
               {searchTerm === "" && (
                 <>
