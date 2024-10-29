@@ -10,6 +10,10 @@ const Header = () => {
   const [cartItems, setCartItems] = useState(0);
   const navigate = useNavigate();
 
+  const handleCartClick = () => {
+    navigate("/cart"); // Navega para a página do carrinho
+  };
+
   return (
     <header className="header">
       <div className={commonStyles.container}>
@@ -36,6 +40,7 @@ const Header = () => {
           >
             <ShoppingCart
               style={{ width: 35, height: 35, cursor: "pointer" }}
+              onClick={handleCartClick} // Adiciona a função de clique
             />
           </Badge>
           <Person

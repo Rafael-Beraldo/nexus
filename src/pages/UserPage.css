@@ -16,6 +16,17 @@ body {
   width: 100%;
   background-color: #b069f1;
   min-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+}
+
+.profile-wraper {
+  max-width: 80%;
+  margin: 2% auto;
+  padding: 2%;
+  background-color: #af69f17c;
+  border-radius: 15px;
 }
 
 .profile-settings {
@@ -43,6 +54,7 @@ body {
 
 .profile-section {
   padding: 20px;
+  /* background-color: #b069f1; */
   margin-bottom: 20px;
 }
 
