@@ -6,12 +6,12 @@ import "./style.css";
 import commonStyles from "../../styles/commonStyles.module.css";
 import Input from "../Input";
 
-const Header = ({ onSearch }) => { // Recebe a função onSearch como prop
+const Header = ({ onSearch }) => {
   const [cartItems, setCartItems] = useState(0);
   const navigate = useNavigate();
 
   const handleCartClick = () => {
-    navigate("/cart"); // Navega para a página do carrinho
+    navigate("/cart");
   };
 
   return (
@@ -23,7 +23,7 @@ const Header = ({ onSearch }) => { // Recebe a função onSearch como prop
           </div>
         </div>
         <div className="big-column">
-          <Input placeholder="Pesquisar..." onSearch={onSearch} /> {/* Passa a função aqui */}
+          <Input placeholder="Pesquisar..." onSearch={onSearch} />
         </div>
         <div
           className="small-column"
@@ -40,7 +40,7 @@ const Header = ({ onSearch }) => { // Recebe a função onSearch como prop
           >
             <ShoppingCart
               style={{ width: 35, height: 35, cursor: "pointer" }}
-              onClick={handleCartClick} // Adiciona a função de clique
+              onClick={handleCartClick}
             />
           </Badge>
           <Person

@@ -58,7 +58,7 @@ const Cart = () => {
               <img src={item.image} alt={item.title} style={{ width: 50, height: 50 }} />
               <div className="cartItemDetails">
                 <h3>{item.title}</h3>
-                <p>{`R$${(item.price * (item.quantity || 1)).toFixed(2)}`}</p> {/* Preço total */}
+                <p>{`R$${(item.price * (item.quantity || 1)).toFixed(2)}`}</p>
                 <div className="quantityControls">
                   <IconButton onClick={() => handleDecreaseQuantity(index)}>
                     <RemoveIcon fontSize="small" />

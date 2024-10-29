@@ -7,8 +7,8 @@ import Product from "../components/Product";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
-  const [searchTerm, setSearchTerm] = useState(""); // Estado para o termo de busca
-
+  const [searchTerm, setSearchTerm] = useState(""); 
+  
   useEffect(() => {
     const fetchProducts = async () => {
       try {
@@ -23,12 +23,10 @@ const HomePage = () => {
     fetchProducts();
   }, []);
 
-  // Função que manipula a busca
   const handleSearch = (term) => {
     setSearchTerm(term);
   };
 
-  // Filtrar produtos com base no termo de busca
   const filteredProducts = products.filter(product =>
     product.title.toLowerCase().includes(searchTerm.toLowerCase())
   );
@@ -39,7 +37,7 @@ const HomePage = () => {
 
   return (
     <div>
-      <Header onSearch={handleSearch} /> {/* Passa a função para o Header */}
+      <Header onSearch={handleSearch} />
       <Section />
 
       <div className={commonStyles.center}>

@@ -4,9 +4,8 @@ import "./style.css";
 import iphomeImg from "../../assets/iphone.png";
 
 const Product = (props) => {
-  // Verifique se o produto está definido
   if (!props.product) {
-    return <div>Produto não encontrado</div>; // Mensagem de erro ou carregamento
+    return <div>Produto não encontrado</div>; 
   }
 
   const { image, title, price, id } = props.product;
@@ -17,23 +16,18 @@ const Product = (props) => {
 
   const addToCart = async () => {
     try {
-      // Obtendo o carrinho existente do AsyncStorage
       const existingCart = await AsyncStorage.getItem('cart');
       const cart = existingCart ? JSON.parse(existingCart) : [];
 
-      // Verificando se o produto já está no carrinho
       const existingItemIndex = cart.findIndex(item => item.id === id);
 
       if (existingItemIndex > -1) {
-        // Se já existir, aumente a quantidade
         cart[existingItemIndex].quantity += 1;
       } else {
-        // Se não existir, adicione o novo produto com quantidade 1
         const newItem = { ...props.product, quantity: 1 };
         cart.push(newItem);
       }
 
-      // Armazenando o carrinho atualizado no AsyncStorage
       await AsyncStorage.setItem('cart', JSON.stringify(cart));
       console.log('Produto adicionado ao carrinho:', props.product);
     } catch (error) {
