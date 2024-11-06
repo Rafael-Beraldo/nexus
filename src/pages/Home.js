@@ -44,6 +44,12 @@ const HomePage = () => {
         <div className={commonStyles.width_70}>
           {filteredProducts.length > 0 ? (
             <>
+              {searchTerm === "" && (
+                <>
+                  <Carousel products={firstHalf} />
+                  <Carousel products={secondHalf} />
+                </>
+              )}
               <div className={commonStyles.productList}>
                 {filteredProducts.map((product) => (
                   <div key={product.id} className={commonStyles.productItem}>
@@ -51,12 +57,6 @@ const HomePage = () => {
                   </div>
                 ))}
               </div>
-              {searchTerm === "" && (
-                <>
-                  <Carousel products={firstHalf} />
-                  <Carousel products={secondHalf} />
-                </>
-              )}
             </>
           ) : (
             <p>Nenhum produto encontrado.</p>
