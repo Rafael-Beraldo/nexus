@@ -9,6 +9,7 @@ import {
   Add as AddIcon,
   Remove as RemoveIcon,
   ArrowBack as ArrowIcon,
+  Person as PersonIcon,
 } from "@mui/icons-material";
 
 import "./Cart.css";
@@ -60,11 +61,19 @@ const Cart = () => {
   return (
     <>
       <header className="headerCart">
-        <ArrowIcon
-          fontSize="small"
-          onClick={() => navigate(-1)}
-          style={{ cursor: "pointer" }}
-        />
+        <div className="headerLeft">
+          <ArrowIcon
+            fontSize="small"
+            onClick={() => navigate(-1)}
+            style={{ cursor: "pointer" }}
+          />
+        </div>
+        <div className="headerRight">
+          <PersonIcon
+            style={{ width: 35, height: 35, cursor: "pointer" }}
+            onClick={() => navigate("/user")}
+          />
+        </div>
       </header>
       <div className="cartContainer">
         <h2>Carrinho de Compras</h2>

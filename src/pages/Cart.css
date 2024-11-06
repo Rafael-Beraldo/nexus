@@ -7,9 +7,16 @@
   height: 10vh;
   background-color: #b069f1;
   display: flex;
-  justify-content: flex-start;
   align-items: center;
   padding-left: 2%;
+}
+
+.headerLeft {
+  flex: 11.5;
+}
+
+.headerRight {
+  flex: 0.5;
 }
 
 .cartContainer h2 {
