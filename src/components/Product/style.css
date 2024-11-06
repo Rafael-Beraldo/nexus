@@ -51,3 +51,8 @@ body {
 .btnAddToCart:hover {
   cursor: pointer;
 }
+
+.product-link {
+  text-decoration: none;
+  color: inherit;
+}

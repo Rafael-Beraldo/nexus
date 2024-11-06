@@ -1,0 +1,49 @@
+.headerProduct {
+  width: 100%;
+  height: 10vh;
+  background-color: #b069f1;
+}
+
+.productPage {
+  max-width: 1280px;
+  margin: 0 auto;
+  padding: 1.5% 0.5%;
+  display: flex;
+  background-color: #ebebeb;
+}
+
+.productContainer {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  background-color: #ffffff;
+  border-radius: 15px;
+  padding: 1%;
+}
+
+.imageContainer {
+  margin: 0 auto;
+  padding: 1%;
+  background-color: #ffffff;
+}
+
+.productImage {
+  width: 50vh;
+  height: 50vh;
+}
+
+.btnProductPage {
+  outline: none;
+  border: none;
+  background-color: #b069f1;
+  padding: 15px;
+  border-radius: 20px;
+  color: #ffffff;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.pagamentoContainer {
+  flex: 1;
+  padding: 2%;
+}
