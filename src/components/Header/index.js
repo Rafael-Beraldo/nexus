@@ -1,9 +1,12 @@
 import React, { useState } from "react";
+
+import "./style.css";
+import commonStyles from "../../styles/commonStyles.module.css";
+
 import { useNavigate } from "react-router-dom";
 import { ShoppingCart, Person } from "@mui/icons-material";
 import Badge from "@mui/material/Badge";
-import "./style.css";
-import commonStyles from "../../styles/commonStyles.module.css";
+
 import Input from "../Input";
 
 const Header = ({ onSearch }) => {

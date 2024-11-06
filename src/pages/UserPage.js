@@ -81,9 +81,10 @@ const UserPage = () => {
   return (
     <div className="profile-container">
       <div className="profile-header">
-        <div>
+        <div style={{ paddingLeft: "2%" }}>
           <ArrowBackIcon
-            style={{ width: 35, height: 35, cursor: "pointer" }}
+            fontSize="small"
+            style={{ cursor: "pointer" }}
             onClick={() => navigate(-1)}
           />
         </div>
