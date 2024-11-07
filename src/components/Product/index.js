@@ -37,27 +37,29 @@ const Product = (props) => {
   };
 
   return (
-    <Link to={`/produto/${id}`} className="product-link">
+    <>
       <div className="productCard">
-        <img
-          src={image || iphomeImg}
-          alt={title}
-          style={{ margin: "0 auto", width: "80%", height: 200 }}
-        />
-        <h3>{truncateTitle(title)}</h3>
-        <p className="strikeThrough">{`R$${(price + 1).toFixed(2)}`}</p>
-        <p className="priceProduct">{`R$${price.toFixed(2)}`}</p>
-        <h2 className="font-s">{`10x de R$ ${(price / 10).toFixed(
-          2
-        )} sem juros`}</h2>
-        <span>
-          {`Até R$${(price / 10).toFixed(2)}`} <br />
-        </span>
+        <Link to={`/produto/${id}`} className="product-link">
+          <img
+            src={image || iphomeImg}
+            alt={title}
+            style={{ margin: "0 auto", width: "80%", height: 200 }}
+          />
+          <h3>{truncateTitle(title)}</h3>
+          <p className="strikeThrough">{`R$${(price + 1).toFixed(2)}`}</p>
+          <p className="priceProduct">{`R$${price.toFixed(2)}`}</p>
+          <h2 className="font-s">{`10x de R$ ${(price / 10).toFixed(
+            2
+          )} sem juros`}</h2>
+          <span>
+            {`Até R$${(price / 10).toFixed(2)}`} <br />
+          </span>
+        </Link>
         <button onClick={addToCart} className="btnAddToCart">
           Adicionar no carrinho
         </button>
       </div>
-    </Link>
+    </>
   );
 };
 

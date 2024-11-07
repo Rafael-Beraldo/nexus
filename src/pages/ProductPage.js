@@ -2,9 +2,9 @@ import React, { useEffect, useState } from "react";
 
 import "./ProductPage.css";
 
-import Header from "../components/Header";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 
-import { useParams } from "react-router-dom";
+import { useParams, useNavigate } from "react-router-dom";
 import {
   Elements,
   CardElement,
@@ -15,6 +15,8 @@ import getStripe from "../auth/stripeConfig";
 
 const ProductPage = () => {
   const { id } = useParams();
+  const navigate = useNavigate();
+
   const [product, setProduct] = useState(null);
   const [amount, setAmount] = useState(1000); // 1000 (R$ 10,00)
   const [installments, setInstallments] = useState(1);
@@ -79,7 +81,15 @@ const ProductPage = () => {
 
   return (
     <>
-      <header className="headerProduct"></header>
+      <header className="headerProduct">
+        <div style={{ paddingLeft: "2%" }}>
+          <ArrowBackIcon
+            fontSize="small"
+            style={{ cursor: "pointer" }}
+            onClick={() => navigate(-1)}
+          />
+        </div>
+      </header>
       <div className="productPage">
         <div className="productContainer">
           <div className="imageContainer">
@@ -91,24 +101,25 @@ const ProductPage = () => {
           </div>
           <h1>{product.title}</h1>
           <p>{product.description}</p>
-          <div className="price">{`R$${product.price.toFixed(2)}`}</div>
-          <button className="btnProductPage">Comprar</button>
         </div>
         <div className="pagamentoContainer">
           <Elements stripe={getStripe()}>
             <form onSubmit={handlePayment}>
-              <div>
+              <div className="headerPayment">
                 <p style={{ fontSize: 11, color: "rgba(0,0,0,0.5)" }}>
                   Produto:
                 </p>
                 <h1>{product.title}</h1>
-                <label>{`R$${product.price.toFixed(2)}`}</label>
+                <label className="priceProduct">{`R$${product.price.toFixed(
+                  2
+                )}`}</label>
               </div>
-              <div>
-                <label>Parcelas:</label>
+              <div className="">
+                <label className="textParcela">Parcela(s):</label>
                 <input
                   type="number"
                   value={installments}
+                  className="inputProductPage"
                   onChange={(e) => setInstallments(e.target.value)}
                   min="1"
                 />
@@ -116,9 +127,15 @@ const ProductPage = () => {
               <div>
                 <CardElement />
               </div>
-              <button type="submit" disabled={!stripe}>
-                Pagar
-              </button>
+              <div className="containerBtn">
+                <button
+                  type="submit"
+                  disabled={!stripe}
+                  className="btnProductPage"
+                >
+                  Comprar
+                </button>
+              </div>
             </form>
           </Elements>
         </div>

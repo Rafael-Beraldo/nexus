@@ -1,7 +1,10 @@
 .headerProduct {
   width: 100%;
-  height: 10vh;
   background-color: #b069f1;
+  min-height: 10vh;
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
 }
 
 .productPage {
@@ -9,7 +12,6 @@
   margin: 0 auto;
   padding: 1.5% 0.5%;
   display: flex;
-  background-color: #ebebeb;
 }
 
 .productContainer {
@@ -19,6 +21,10 @@
   background-color: #ffffff;
   border-radius: 15px;
   padding: 1%;
+}
+
+.headerPayment {
+  margin-bottom: 5vh;
 }
 
 .imageContainer {
@@ -32,8 +38,43 @@
   height: 50vh;
 }
 
+.priceProduct {
+  font-size: 28px;
+  font-weight: 400;
+  color: #000000;
+}
+
+.textParcela {
+  font-weight: 300;
+  margin-right: 5px;
+}
+
+.inputProductPage {
+  outline: none;
+  border: none;
+  width: 40%;
+  border-radius: 20px;
+  padding: 10px;
+  margin-bottom: 5vh;
+}
+
+.pagamentoContainer {
+  flex: 1;
+  position: relative;
+  padding: 2%;
+}
+
+.containerBtn {
+  position: absolute;
+  width: 100%;
+  padding: 20px;
+  bottom: 0;
+  left: 0;
+}
+
 .btnProductPage {
   outline: none;
+  width: 100%;
   border: none;
   background-color: #b069f1;
   padding: 15px;
@@ -41,9 +82,4 @@
   color: #ffffff;
   font-weight: bold;
   font-size: 16px;
-}
-
-.pagamentoContainer {
-  flex: 1;
-  padding: 2%;
 }
