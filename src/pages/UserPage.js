@@ -1,14 +1,11 @@
-import React, { useEffect, useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./UserPage.css";
 
 const UserPage = () => {
   const navigate = useNavigate();
-
   const [user, setUser] = useState(null);
-  const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(true);
   const [isEditing, setIsEditing] = useState(false);
   const [formData, setFormData] = useState({
     name: { firstname: "", lastname: "" },
@@ -18,23 +15,11 @@ const UserPage = () => {
   });
 
   useEffect(() => {
-    const fetchUser = async () => {
-      try {
-        const response = await fetch("https://fakestoreapi.com/users/1");
-        if (!response.ok) {
-          throw new Error("Erro ao buscar dados do usuário.");
-        }
-        const data = await response.json();
-        setUser(data);
-        setFormData(data);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
-
-    fetchUser();
+    const storedUser = JSON.parse(localStorage.getItem("userData"));
+    if (storedUser) {
+      setUser(storedUser);
+      setFormData(storedUser);
+    }
   }, []);
 
   const handleEditToggle = () => {
@@ -64,19 +49,15 @@ const UserPage = () => {
     }
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = (e) => {
     e.preventDefault();
-
-    setUser((prevUser) => ({
-      ...prevUser,
-      ...formData,
-    }));
-
+    setUser(formData);
     setIsEditing(false);
+
+    localStorage.setItem("userData", JSON.stringify(formData));
   };
 
-  if (loading) return <div>Carregando...</div>;
-  if (error) return <div>Erro: {error}</div>;
+  if (!user) return <div>Carregando dados do usuário...</div>;
 
   return (
     <div className="profile-container">
