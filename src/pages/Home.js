@@ -8,6 +8,7 @@ import Product from "../components/Product";
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
+  const [selectedCategory, setSelectedCategory] = useState("");
 
   useEffect(() => {
     const fetchProducts = async () => {
@@ -27,9 +28,23 @@ const HomePage = () => {
     setSearchTerm(term);
   };
 
-  const filteredProducts = products.filter((product) =>
-    product.title.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const handleCategorySelect = (category) => {
+    setSelectedCategory(category);
+  };
+
+  const clearCategory = () => {
+    setSelectedCategory("");
+  };
+
+  const filteredProducts = products.filter((product) => {
+    const matchesSearch = product.title
+      .toLowerCase()
+      .includes(searchTerm.toLowerCase());
+    const matchesCategory = selectedCategory
+      ? product.category === selectedCategory
+      : true;
+    return matchesSearch && matchesCategory;
+  });
 
   const halfwayIndex = Math.ceil(filteredProducts.length / 2);
   const firstHalf = filteredProducts.slice(0, halfwayIndex);
@@ -38,13 +53,27 @@ const HomePage = () => {
   return (
     <div>
       <Header onSearch={handleSearch} />
-      <Section />
+      <Section onCategorySelect={handleCategorySelect} />
 
       <div className={commonStyles.center}>
         <div className={commonStyles.width_70}>
+          {selectedCategory && (
+            <div className={commonStyles.categorySelected}>
+              <p>
+                Categoria selecionada: <strong>{selectedCategory}</strong>
+              </p>
+              <button
+                onClick={clearCategory}
+                className={commonStyles.clearButton}
+              >
+                Limpar categoria
+              </button>
+            </div>
+          )}
+
           {filteredProducts.length > 0 ? (
             <>
-              {searchTerm === "" && (
+              {searchTerm === "" && !selectedCategory && (
                 <>
                   <Carousel products={firstHalf} />
                   <Carousel products={secondHalf} />

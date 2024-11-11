@@ -1,6 +1,8 @@
 import React, { useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import { AuthContext } from "../auth/AuthContext";
+import "./Login.css";
+import logo from "../assets/logo.png";
 
 const Login = () => {
   const { setIsAuthenticated } = useContext(AuthContext);
@@ -47,24 +49,51 @@ const Login = () => {
 
   return (
     <div>
-      <h2>Login</h2>
-      <form onSubmit={handleLogin}>
-        <input
-          type="email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-          placeholder="Email"
-          required
-        />
-        <input
-          type="password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-          placeholder="Senha"
-          required
-        />
-        <button type="submit">Entrar</button>
-      </form>
+      <div className="profile-header" />
+      <div className="login-section-wraper">
+        <div className="login-section">
+          <img src={logo} style={{ width: 200, height: 60 }} />
+          <div className="login-form">
+            <form onSubmit={handleLogin}>
+              <input
+                type="email"
+                value={email}
+                className={`inputForm`}
+                onChange={(e) => setEmail(e.target.value)}
+                placeholder="Email"
+                maxLength={100}
+                required
+              />
+              <input
+                type="password"
+                value={password}
+                className={`inputForm`}
+                onChange={(e) => setPassword(e.target.value)}
+                placeholder="Senha"
+                required
+              />
+              <div className="container-button">
+                <button className="btn-form" type="submit">
+                  Entrar
+                </button>
+                <button
+                  style={{
+                    marginTop: 5,
+                    color: "#000000",
+                    fontSize: 11,
+                    fontWeight: "lighter",
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Esqueci a Senha
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
       {error && <p>{error}</p>}
     </div>
   );

@@ -1,0 +1,35 @@
+.login-section-wraper {
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  width: 100%;
+}
+
+.login-section {
+  width: 80%;
+  min-height: 80vh;
+  margin-top: 2%;
+  padding: 2%;
+  background-color: #af69f123;
+  border-radius: 15px;
+}
+
+.login-form {
+  margin: 0 auto;
+  padding-top: 6%;
+}
+
+.inputForm {
+  display: block;
+  width: 40%;
+  border: none;
+  outline: none;
+  font-size: 15px;
+  border: 0.5px solid rgba(0, 0, 0, 0);
+  transition: border-color 0.3s ease, border-width 0.3s ease;
+}
+
+.container-button {
+  padding-bottom: 0.5%;
+}
