@@ -1,6 +1,13 @@
 import React from "react";
 import "./style.css";
 
+const mapCategoriesToPortuguese = (categories) => {
+  return categories.map(({ apiCategory, displayName }) => ({
+    apiCategory,
+    displayName,
+  }));
+};
+
 const Section = ({ onCategorySelect }) => {
   const categories = [
     { apiCategory: "electronics", displayName: "Eletrônicos" },
@@ -9,10 +16,12 @@ const Section = ({ onCategorySelect }) => {
     { apiCategory: "women's clothing", displayName: "Roupas Femininas" },
   ];
 
+  const mappedCategories = mapCategoriesToPortuguese(categories);
+
   return (
     <section className="section">
       <div className="category-wraper">
-        {categories.map(({ apiCategory, displayName }) => (
+        {mappedCategories.map(({ apiCategory, displayName }) => (
           <div
             key={apiCategory}
             className="category"
