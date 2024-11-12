@@ -1,86 +1,50 @@
 import React, { useEffect, useState } from "react";
-
-import "./ProductPage.css";
-
-import ArrowBackIcon from "@mui/icons-material/ArrowBack";
-
 import { useParams, useNavigate } from "react-router-dom";
-import {
-  Elements,
-  CardElement,
-  useStripe,
-  useElements,
-} from "@stripe/react-stripe-js";
-import getStripe from "../auth/stripeConfig";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import "./ProductPage.css";
+import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
 
   const [product, setProduct] = useState(null);
-  const [amount, setAmount] = useState(1000); // 1000 (R$ 10,00)
   const [installments, setInstallments] = useState(1);
-  const [clientSecret, setClientSecret] = useState("");
+  const [totalPrice, setTotalPrice] = useState(0);
 
-  const stripe = useStripe();
-  const elements = useElements();
+  const initialOptions = {
+    clientId:
+      "AaKfNymjl48o2itp9lUil3FuP80HdjrFAd_yk6YQofIETcAPirvuYrwXRuVxW_nZXIJHCGTMFdpu5XGA",
+    currency: "BRL",
+  };
 
+  // Carregar o produto via API
   useEffect(() => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(`https://fakestoreapi.com/products/${id}`);
         const data = await response.json();
         setProduct(data);
-
-        const paymentResponse = await fetch(
-          "http://localhost:4242/create-payment-intent",
-          {
-            method: "POST",
-            headers: {
-              "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ amount: amount }),
-          }
-        );
-
-        const paymentData = await paymentResponse.json();
-        setClientSecret(paymentData.clientSecret);
+        setTotalPrice(data.price); // Definir o preço inicial
       } catch (error) {
         console.error("Erro ao carregar produto:", error);
       }
     };
 
     fetchProduct();
-  }, [id, amount]);
+  }, [id]);
+
+  useEffect(() => {
+    // Calcular o preço total baseado nas parcelas
+    if (product) {
+      setTotalPrice((product.price * installments).toFixed(2));
+    }
+  }, [installments, product]);
 
   if (!product) return <div>Carregando...</div>;
 
-  const handlePayment = async (event) => {
-    event.preventDefault();
-
-    if (!clientSecret) {
-      alert("Erro ao obter o clientSecret.");
-      return;
-    }
-
-    const { error, paymentIntent } = await stripe.confirmCardPayment(
-      clientSecret,
-      {
-        payment_method: {
-          card: elements.getElement(CardElement),
-        },
-      }
-    );
-
-    if (error) {
-      alert(`Erro ao processar pagamento: ${error.message}`);
-    } else if (paymentIntent.status === "succeeded") {
-      alert("Pagamento realizado com sucesso!");
-    }
-  };
-
   return (
-    <>
+    <PayPalScriptProvider options={initialOptions}>
       <header className="headerProduct">
         <div style={{ paddingLeft: "2%" }}>
           <ArrowBackIcon
@@ -103,44 +67,53 @@ const ProductPage = () => {
           <p>{product.description}</p>
         </div>
         <div className="pagamentoContainer">
-          <Elements stripe={getStripe()}>
-            <form onSubmit={handlePayment}>
-              <div className="headerPayment">
-                <p style={{ fontSize: 11, color: "rgba(0,0,0,0.5)" }}>
-                  Produto:
-                </p>
-                <h1>{product.title}</h1>
-                <label className="priceProduct">{`R$${product.price.toFixed(
-                  2
-                )}`}</label>
-              </div>
-              <div className="">
-                <label className="textParcela">Parcela(s):</label>
-                <input
-                  type="number"
-                  value={installments}
-                  className="inputProductPage"
-                  onChange={(e) => setInstallments(e.target.value)}
-                  min="1"
-                />
-              </div>
-              <div>
-                <CardElement />
-              </div>
-              <div className="containerBtn">
-                <button
-                  type="submit"
-                  disabled={!stripe}
-                  className="btnProductPage"
-                >
-                  Comprar
-                </button>
-              </div>
-            </form>
-          </Elements>
+          <form>
+            <div className="headerPayment">
+              <p style={{ fontSize: 11, color: "rgba(0,0,0,0.5)" }}>Produto:</p>
+              <h1>{product.title}</h1>
+              <label className="priceProduct">{`R$${product.price.toFixed(
+                2
+              )}`}</label>
+            </div>
+            <div>
+              <label className="textParcela">Parcela(s):</label>
+              <input
+                type="number"
+                value={installments}
+                className="inputProductPage"
+                onChange={(e) => setInstallments(Number(e.target.value))}
+                min="1"
+              />
+            </div>
+            <div className="totalPrice">
+              <p>
+                Total a pagar (em {installments} parcela(s)): R${totalPrice}
+              </p>
+            </div>
+          </form>
+
+          <div id="paypal-button-container" className="containerBtn"></div>
+          <PayPalButtons
+            createOrder={(data, actions) => {
+              return actions.order.create({
+                purchase_units: [
+                  {
+                    amount: {
+                      value: totalPrice,
+                    },
+                  },
+                ],
+              });
+            }}
+            onApprove={(data, actions) => {
+              return actions.order.capture().then((details) => {
+                alert("Transação concluída com sucesso!");
+              });
+            }}
+          />
         </div>
       </div>
-    </>
+    </PayPalScriptProvider>
   );
 };
 

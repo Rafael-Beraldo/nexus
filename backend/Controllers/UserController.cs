@@ -1,6 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using backend.Services;
+using Microsoft.AspNetCore.Authorization;  // Adicione este namespace
 
 namespace backend.Controllers
 {
@@ -15,17 +16,19 @@ namespace backend.Controllers
             _userService = userService;
         }
 
-        // GET
+        // GET - Protegido por JWT
         [HttpGet]
-        public async Task <ActionResult<List<User>>> GetUsers()
+        [Authorize]  // Adiciona a proteção de autenticação
+        public async Task<ActionResult<List<User>>> GetUsers()
         {
             var users = await _userService.GetUsersAsync();
             return Ok(users);
         }
 
-        // GET by Id
+        // GET by Id - Protegido por JWT
         [HttpGet("{id}")]
-        public async Task <ActionResult<User>> GetUserById(string id)
+        [Authorize]
+        public async Task<ActionResult<User>> GetUserById(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
 
@@ -37,16 +40,18 @@ namespace backend.Controllers
             return Ok(user);
         }
 
-        // POST
+        // POST - Protegido por JWT
         [HttpPost]
+        [Authorize]
         public async Task<IActionResult> CreateUser(User user)
         {
             await _userService.CreateUserAsync(user);
-            return CreatedAtAction(nameof(GetUserById), new { id = user.Id}, user);
+            return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
-        // PUT
+        // PUT - Protegido por JWT
         [HttpPut]
+        [Authorize]
         public async Task<IActionResult> UpdateUser(string id, User updateUser)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -62,8 +67,9 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // DELETE
+        // DELETE - Protegido por JWT
         [HttpDelete("{id}")]
+        [Authorize]
         public async Task<IActionResult> DeleteUser(string id)
         {
             var user = await _userService.GetUserByIdAsync(id);
@@ -77,7 +83,9 @@ namespace backend.Controllers
             return NoContent();
         }
 
+        // GET por email - Protegido por JWT
         [HttpGet("email/{email}")]
+        [Authorize]
         public async Task<ActionResult<User>> GetUserByEmail(string email)
         {
             var user = await _userService.GetUserByEmailAsync(email);
@@ -90,6 +98,7 @@ namespace backend.Controllers
             return Ok(user);
         }
 
+        // POST Login - Não protegido, pois é para login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {

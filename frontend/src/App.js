@@ -5,6 +5,7 @@ import getStripe from "./auth/stripeConfig";
 
 import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./service/ProtectedRoute";
+import { PayPalScriptProvider } from "@paypal/react-paypal-js";
 
 import Home from "./pages/Home";
 import UserPage from "./pages/UserPage";
@@ -13,31 +14,30 @@ import ProductPage from "./pages/ProductPage";
 import Login from "./pages/Login";
 
 function App() {
-  const stripePromise = getStripe();
+  const initialOptions = {
+    clientId:
+      "AaKfNymjl48o2itp9lUil3FuP80HdjrFAd_yk6YQofIETcAPirvuYrwXRuVxW_nZXIJHCGTMFdpu5XGA",
+    currency: "BRL",
+  };
 
   return (
     <AuthProvider>
-      <Router>
-        <Routes>
-          <Route path="/" element={<Home />} />
-          <Route path="/login" element={<Login />} />
-          <Route path="/cart" element={<Cart />} />
+      <PayPalScriptProvider options={initialOptions}>
+        <Router>
+          <Routes>
+            <Route path="/" element={<Home />} />
+            <Route path="/login" element={<Login />} />
+            <Route path="/cart" element={<Cart />} />
 
-          <Route
-            path="/user"
-            element={<ProtectedRoute element={<UserPage />} />}
-          />
+            <Route
+              path="/user"
+              element={<ProtectedRoute element={<UserPage />} />}
+            />
 
-          <Route
-            path="/produto/:id"
-            element={
-              <Elements stripe={stripePromise}>
-                <ProductPage />
-              </Elements>
-            }
-          />
-        </Routes>
-      </Router>
+            <Route path="/produto/:id" element={<ProductPage />} />
+          </Routes>
+        </Router>
+      </PayPalScriptProvider>
     </AuthProvider>
   );
 }
