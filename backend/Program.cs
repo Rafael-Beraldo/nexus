@@ -8,10 +8,12 @@ using System.Text;
 
 var builder = WebApplication.CreateBuilder(args);
 
+// Configuração da string de conexão do MongoDB
 builder.Services.Configure<MongoDbSettings>(
     builder.Configuration.GetSection("ConnectionStrings")
 );
 
+// Configuração do MongoDB Client e Database
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
@@ -33,9 +35,11 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
+// Adiciona os serviços de Product e User
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddSingleton<UserService>();
 
+// Configuração de autenticação JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
     .AddJwtBearer(options =>
     {
@@ -43,19 +47,75 @@ builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
         {
             ValidateIssuer = true,
             ValidateAudience = true,
-            ValidateLifetime = true,
+            ValidateLifetime = true, // Verifica a validade do token
             ValidateIssuerSigningKey = true,
             ValidIssuer = builder.Configuration["Jwt:Issuer"],
             ValidAudience = builder.Configuration["Jwt:Audience"],
             IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
         };
+
+        options.Events = new JwtBearerEvents
+        {
+            OnAuthenticationFailed = context =>
+            {
+                // Exibir a exceção que gerou a falha
+                Console.WriteLine($"Token inválido: {context.Exception.Message}");
+                return Task.CompletedTask;
+            },
+            OnTokenValidated = context =>
+            {
+                Console.WriteLine("Token validado com sucesso.");
+                return Task.CompletedTask;
+            }
+        };
     });
+
+// Configuração do Swagger
+builder.Services.AddSwaggerGen(options =>
+{
+    options.AddSecurityDefinition("Bearer", new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+    {
+        In = Microsoft.OpenApi.Models.ParameterLocation.Header,
+        Description = "Insira o token JWT",
+        Name = "Authorization",
+        Type = Microsoft.OpenApi.Models.SecuritySchemeType.ApiKey,
+        Scheme = "Bearer"
+    });
+
+    options.AddSecurityRequirement(new Microsoft.OpenApi.Models.OpenApiSecurityRequirement
+    {
+        {
+            new Microsoft.OpenApi.Models.OpenApiSecurityScheme
+            {
+                Reference = new Microsoft.OpenApi.Models.OpenApiReference
+                {
+                    Type = Microsoft.OpenApi.Models.ReferenceType.SecurityScheme,
+                    Id = "Bearer"
+                }
+            },
+            new string[] { }
+        }
+    });
+});
 
 builder.Services.AddControllers();
 builder.Services.AddEndpointsApiExplorer();
-builder.Services.AddSwaggerGen();
+
+// Configuração do CORS
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowAll", policy =>
+    {
+        policy.AllowAnyOrigin() // Permite qualquer origem
+            .AllowAnyMethod() // Permite qualquer método (GET, POST, PUT, DELETE, etc.)
+            .AllowAnyHeader(); // Permite qualquer cabeçalho
+    });
+});
 
 var app = builder.Build();
+
+// Aplica a política de CORS
+app.UseCors("AllowAll");
 
 if (app.Environment.IsDevelopment())
 {

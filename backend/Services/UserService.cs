@@ -41,8 +41,8 @@ namespace backend.Services
             var credentials = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
 
             var token = new JwtSecurityToken(
-                issuer: "yourIssuer",
-                audience: "yourAudience",
+                issuer: "backend",
+                audience: "frontend",
                 claims: claims,
                 expires: DateTime.Now.AddHours(1),
                 signingCredentials: credentials

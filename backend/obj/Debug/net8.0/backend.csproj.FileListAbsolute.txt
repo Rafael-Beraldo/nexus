@@ -47,3 +47,7 @@ C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Microsoft.IdentityModel
 C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Protocols.OpenIdConnect.dll
 C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Microsoft.IdentityModel.Tokens.dll
 C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\System.IdentityModel.Tokens.Jwt.dll
+C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Newtonsoft.Json.dll
+C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Stripe.net.dll
+C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\System.Configuration.ConfigurationManager.dll
+C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\System.Security.Cryptography.ProtectedData.dll
