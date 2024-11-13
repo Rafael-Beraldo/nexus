@@ -2,6 +2,7 @@ using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using backend.Services;
 using Microsoft.AspNetCore.Authorization;  // Adicione este namespace
+using System.Security.Claims;
 
 namespace backend.Controllers
 {
@@ -14,6 +15,27 @@ namespace backend.Controllers
         public UserController(UserService userService)
         {
             _userService = userService;
+        }
+
+        [HttpGet("me")]
+        [Authorize]  
+        public async Task<ActionResult<User>> GetMyUser()
+        {
+            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                return Unauthorized("Usuário não autenticado");
+            }
+
+            var user = await _userService.GetUserByIdAsync(userId);
+
+            if (user == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
+
+            return Ok(user);  
         }
 
         // GET - Protegido por JWT
