@@ -1,25 +1,33 @@
-import React, { useState, useEffect, useRef } from "react";
+import React, { useState, useEffect, useRef, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./UserPage.css";
 import logo from "../assets/logo.png";
+import { AuthContext } from "../auth/AuthContext";
+import { ObjectId } from "bson";
 
 const UserPage = () => {
   const navigate = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
 
-  const [user, setUser] = useState(null);
+  const [id, setId] = useState("");
   const [isEditing, setIsEditing] = useState(false);
-
   const [formData, setFormData] = useState({
-    name: { firstname: "", lastname: "" },
-    address: { street: "", number: "", city: "" },
+    firstName: "",
+    lastName: "",
+    street: "",
+    number: "",
+    city: "",
     phone: "",
     email: "",
+    imageUrl: "",
   });
   const [errors, setErrors] = useState({
-    firstname: false,
-    lastname: false,
-    address: false,
+    firstName: false,
+    lastName: false,
+    street: false,
+    number: false,
+    city: false,
     phone: false,
     email: false,
   });
@@ -33,12 +41,28 @@ const UserPage = () => {
   const emailRef = useRef();
 
   useEffect(() => {
-    const storedUser = JSON.parse(localStorage.getItem("userData"));
-    if (storedUser) {
-      setUser(storedUser);
-      setFormData(storedUser);
+    const token = localStorage.getItem("token");
+    if (!token) {
+      navigate("/login");
+      return;
     }
-  }, []);
+
+    fetch("http://localhost:5047/api/User/me", {
+      headers: { Authorization: `Bearer ${token}` },
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("User Data:", data);
+
+        setId(data.id);
+        console.log("aa", data.id);
+        setUser(data);
+        setFormData(data);
+      })
+      .catch((error) =>
+        console.error("Erro ao buscar dados do usuário:", error)
+      );
+  }, [navigate, setUser]);
 
   const handleEditToggle = () => {
     setIsEditing(!isEditing);
@@ -46,53 +70,25 @@ const UserPage = () => {
 
   const handleChange = (e) => {
     const { name, value } = e.target;
-
-    if (name.startsWith("name.")) {
-      const field = name.split(".")[1];
-      setFormData((prevData) => ({
-        ...prevData,
-        name: { ...prevData.name, [field]: value },
-      }));
-    } else if (name.startsWith("address.")) {
-      const field = name.split(".")[1];
-      setFormData((prevData) => ({
-        ...prevData,
-        address: { ...prevData.address, [field]: value },
-      }));
-    } else {
-      setFormData((prevData) => ({
-        ...prevData,
-        [name]: value,
-      }));
-    }
+    setFormData((prevData) => ({
+      ...prevData,
+      [name]: value,
+    }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let validationErrors = {};
-
-    if (isEditing) {
-      validationErrors = {
-        firstname: !formData.name.firstname,
-        lastname: !formData.name.lastname,
-        street: !formData.address.street,
-        number: !formData.address.number,
-        city: !formData.address.city,
-        phone: !formData.phone,
-        email: !formData.email,
-      };
-    } else {
-      validationErrors = {
-        firstname: !nameRef.current?.value,
-        lastname: !lastnameRef.current?.value,
-        street: !streetRef.current?.value,
-        number: !numberRef.current?.value,
-        city: !cityRef.current?.value,
-        phone: !phoneRef.current?.value,
-        email: !emailRef.current?.value,
-      };
-    }
+    // Validação de dados
+    let validationErrors = {
+      firstName: !formData.firstName,
+      lastName: !formData.lastName,
+      street: !formData.street,
+      number: !formData.number,
+      city: !formData.city,
+      phone: !formData.phone,
+      email: !formData.email,
+    };
 
     setErrors(validationErrors);
 
@@ -100,15 +96,48 @@ const UserPage = () => {
       return;
     }
 
-    setUser(formData);
-    setIsEditing(false);
-    localStorage.setItem("userData", JSON.stringify(formData));
-    alert("Usuário atualizado com sucesso!");
+    const token = localStorage.getItem("token");
+    if (!token) {
+      alert("Token não encontrado! Por favor, faça login novamente.");
+      return;
+    }
+
+    try {
+      const response = await fetch(`http://localhost:5047/api/User/${id}`, {
+        method: "PUT",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify({
+          email: "user@example.com",
+          password: "123",
+          firstName: "cleber",
+          lastName: "bambam",
+          street: "string",
+          number: "string",
+          city: "string",
+          imageUrl: "",
+          phone: "str",
+        }),
+      });
+
+      if (response.status === 204) {
+        console.log("Usuário atualizado com sucesso");
+      } else if (response.ok) {
+        const data = await response.json();
+        console.log(data);
+      } else {
+        throw new Error("Erro na requisição");
+      }
+    } catch (error) {
+      console.error("Erro na requisição:", error);
+    }
   };
 
   const handleLogout = () => {
-    localStorage.removeItem("userData");
-    navigate("/login");
+    localStorage.removeItem("token");
+    setUser(null);
   };
 
   return (
@@ -138,12 +167,12 @@ const UserPage = () => {
           <h1>Ficha do Usuário:</h1>
           <div className="profile-settings">
             <img
-              src="https://via.placeholder.com/150"
+              src={user.imageUrl || "https://via.placeholder.com/150"}
               alt="Foto de Perfil"
               className="profile-picture"
             />
             <h2 className="profile-name">
-              {user.name.firstname} {user.name.lastname}
+              {user.firstName} {user.lastName}
             </h2>
             <p className="profile-email">{user.email}</p>
           </div>
@@ -158,10 +187,10 @@ const UserPage = () => {
                         Nome:
                         <input
                           type="text"
-                          name="name.firstname"
+                          name="firstName"
                           className="input-user-form"
                           onChange={handleChange}
-                          value={formData.name.firstname}
+                          value={formData.firstName}
                         />
                       </label>
                     </div>
@@ -171,10 +200,10 @@ const UserPage = () => {
                         Sobrenome:
                         <input
                           type="text"
-                          name="name.lastname"
+                          name="lastName"
                           className="input-user-form"
                           onChange={handleChange}
-                          value={formData.name.lastname}
+                          value={formData.lastName}
                         />
                       </label>
                     </div>
@@ -197,9 +226,9 @@ const UserPage = () => {
                         Rua:
                         <input
                           type="text"
-                          name="address.street"
+                          name="street"
                           className="input-user-form"
-                          value={formData.address.street}
+                          value={formData.street}
                           onChange={handleChange}
                         />
                       </label>
@@ -210,9 +239,9 @@ const UserPage = () => {
                         Número:
                         <input
                           type="text"
-                          name="address.number"
+                          name="number"
                           className="input-user-form"
-                          value={formData.address.number}
+                          value={formData.number}
                           onChange={handleChange}
                         />
                       </label>
@@ -222,9 +251,9 @@ const UserPage = () => {
                       <label style={{ fontSize: 14 }}>
                         <input
                           type="text"
-                          name="address.city"
+                          name="city"
                           className="input-user-form"
-                          value={formData.address.city}
+                          value={formData.city}
                           onChange={handleChange}
                         />
                       </label>
@@ -240,33 +269,21 @@ const UserPage = () => {
             ) : (
               <>
                 <p>
-                  <strong>Nome:</strong> {user.name.firstname}{" "}
-                  {user.name.lastname}
+                  <strong>Nome:</strong> {user.firstName} {user.lastName}
                 </p>
                 <p>
-                  <strong>Endereço:</strong> {user.address.street},{" "}
-                  {user.address.number} - {user.address.city}
+                  <strong>Endereço:</strong> {user.street}, {user.number} -{" "}
+                  {user.city}
+                </p>
+                <p>
+                  <strong>Email:</strong> {user.email}
                 </p>
                 <p>
                   <strong>Telefone:</strong> {user.phone}
                 </p>
-                <div style={{ textAlign: "center", padding: 5 }}>
-                  <button className="edit-button" onClick={handleEditToggle}>
-                    Editar Perfil
-                  </button>
-                  <button
-                    onClick={handleLogout}
-                    style={{
-                      marginTop: 5,
-                      color: "red",
-                      fontSize: 11,
-                      fontWeight: "lighter",
-                      border: "none",
-                      background: "none",
-                      cursor: "pointer",
-                    }}
-                  >
-                    Desconectar
+                <div className="container-button2">
+                  <button className="btn-form" onClick={handleEditToggle}>
+                    Editar
                   </button>
                 </div>
               </>
@@ -274,85 +291,7 @@ const UserPage = () => {
           </div>
         </div>
       ) : (
-        <div className="profile-wraper">
-          <form onSubmit={handleSubmit}>
-            <input
-              id="name"
-              ref={nameRef}
-              className={`inputForm ${errors.firstname ? "inputError" : ""}`}
-              type="text"
-              placeholder="Nome..."
-              maxLength={32}
-            />
-            <input
-              id="lastname"
-              ref={lastnameRef}
-              className={`inputForm ${errors.lastname ? "inputError" : ""}`}
-              type="text"
-              placeholder="Sobrenome..."
-              maxLength={32}
-            />
-            <input
-              id="street"
-              ref={streetRef}
-              className={`inputForm ${errors.street ? "inputError" : ""}`}
-              type="text"
-              placeholder="Rua..."
-              maxLength={50}
-            />
-            <input
-              id="number"
-              ref={numberRef}
-              className={`inputForm ${errors.number ? "inputError" : ""}`}
-              type="text"
-              placeholder="Número..."
-              maxLength={50}
-            />
-            <input
-              id="city"
-              ref={cityRef}
-              className={`inputForm ${errors.city ? "inputError" : ""}`}
-              type="text"
-              placeholder="Cidade..."
-              maxLength={50}
-            />
-            <input
-              id="phone"
-              ref={phoneRef}
-              className={`inputForm ${errors.phone ? "inputError" : ""}`}
-              type="text"
-              placeholder="Telefone..."
-              maxLength={20}
-            />
-            <input
-              id="email"
-              ref={emailRef}
-              className={`inputForm ${errors.email ? "inputError" : ""}`}
-              type="text"
-              placeholder="Email..."
-              maxLength={32}
-            />
-            <div className="container-button">
-              <button className="btn-form" type="submit">
-                Criar Usuário
-              </button>
-              <button
-                onClick={handleLogout}
-                style={{
-                  marginTop: 5,
-                  color: "#000000",
-                  fontSize: 11,
-                  fontWeight: "lighter",
-                  border: "none",
-                  background: "none",
-                  cursor: "pointer",
-                }}
-              >
-                Já tenho usuário.
-              </button>
-            </div>
-          </form>
-        </div>
+        <p>Carregando dados...</p>
       )}
     </div>
   );

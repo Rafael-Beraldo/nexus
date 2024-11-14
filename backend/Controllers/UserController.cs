@@ -1,11 +1,25 @@
 using Microsoft.AspNetCore.Mvc;
 using backend.Models;
 using backend.Services;
-using Microsoft.AspNetCore.Authorization;  // Adicione este namespace
+using Microsoft.AspNetCore.Authorization; 
 using System.Security.Claims;
+using MongoDB.Bson;
 
 namespace backend.Controllers
 {
+    public class UserDto
+    {
+        public string Id { get; set; }
+        public string Email { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Street { get; set; }
+        public string? Number { get; set; }
+        public string? City { get; set; }
+        public string? ImageUrl { get; set; }
+        public string? Phone { get; set; }
+    }
+
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -18,8 +32,8 @@ namespace backend.Controllers
         }
 
         [HttpGet("me")]
-        [Authorize]  
-        public async Task<ActionResult<User>> GetMyUser()
+        [Authorize]
+        public async Task<ActionResult<UserDto>> GetMyUser()
         {
             var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
 
@@ -28,26 +42,42 @@ namespace backend.Controllers
                 return Unauthorized("Usuário não autenticado");
             }
 
-            var user = await _userService.GetUserByIdAsync(userId);
+            if (!ObjectId.TryParse(userId, out ObjectId objectId))
+            {
+                return BadRequest("Id de usuário inválido.");
+            }
+
+            var user = await _userService.GetUserByIdAsync(objectId.ToString());
 
             if (user == null)
             {
                 return NotFound("Usuário não encontrado");
             }
 
-            return Ok(user);  
+            var userDto = new UserDto
+            {
+                Id = user.Id.ToString(),
+                Email = user.Email,
+                FirstName = user.FirstName,
+                LastName = user.LastName,
+                Street = user.Street,
+                Number = user.Number,
+                City = user.City,
+                ImageUrl = user.ImageUrl,
+                Phone = user.Phone
+            };
+
+            return Ok(userDto);
         }
 
-        // GET - Protegido por JWT
         [HttpGet]
-        [Authorize]  // Adiciona a proteção de autenticação
+        [Authorize]  
         public async Task<ActionResult<List<User>>> GetUsers()
         {
             var users = await _userService.GetUsersAsync();
             return Ok(users);
         }
 
-        // GET by Id - Protegido por JWT
         [HttpGet("{id}")]
         [Authorize]
         public async Task<ActionResult<User>> GetUserById(string id)
@@ -62,7 +92,6 @@ namespace backend.Controllers
             return Ok(user);
         }
 
-        // POST - Protegido por JWT
         [HttpPost]
         [Authorize]
         public async Task<IActionResult> CreateUser(User user)
@@ -71,8 +100,7 @@ namespace backend.Controllers
             return CreatedAtAction(nameof(GetUserById), new { id = user.Id }, user);
         }
 
-        // PUT - Protegido por JWT
-        [HttpPut]
+        [HttpPut("{id}")]
         [Authorize]
         public async Task<IActionResult> UpdateUser(string id, User updateUser)
         {
@@ -89,7 +117,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // DELETE - Protegido por JWT
         [HttpDelete("{id}")]
         [Authorize]
         public async Task<IActionResult> DeleteUser(string id)
@@ -105,7 +132,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // GET por email - Protegido por JWT
         [HttpGet("email/{email}")]
         [Authorize]
         public async Task<ActionResult<User>> GetUserByEmail(string email)
@@ -120,7 +146,6 @@ namespace backend.Controllers
             return Ok(user);
         }
 
-        // POST Login - Não protegido, pois é para login
         [HttpPost("login")]
         public async Task<IActionResult> Login([FromBody] LoginRequest loginRequest)
         {

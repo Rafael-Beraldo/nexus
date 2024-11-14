@@ -1,23 +1,15 @@
-import React, { createContext, useState, useEffect } from "react";
+import React, { createContext, useState } from "react";
 
+// Criação do contexto de autenticação
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
-
-  useEffect(() => {
-    const token = localStorage.getItem("token");
-    setIsAuthenticated(!!token);
-  }, []);
-
-  const logout = () => {
-    localStorage.removeItem("token");
-    setIsAuthenticated(false);
-  };
+  const [user, setUser] = useState(null); // Estado do usuário
+  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
 
   return (
     <AuthContext.Provider
-      value={{ isAuthenticated, setIsAuthenticated, logout }}
+      value={{ user, setUser, isAuthenticated, setIsAuthenticated }}
     >
       {children}
     </AuthContext.Provider>

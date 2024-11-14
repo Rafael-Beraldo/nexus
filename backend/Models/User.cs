@@ -7,8 +7,8 @@ namespace backend.Models
     public class User
     {
         [BsonId]
-        [BsonRepresentation(BsonType.ObjectId)]
-        public ObjectId Id {get; set;} = ObjectId.GenerateNewId();
+        [BsonRepresentation(BsonType.String)]  
+        public ObjectId Id { get; set; } = ObjectId.GenerateNewId();
 
         [Required]
         [EmailAddress(ErrorMessage = "Email inválido")]

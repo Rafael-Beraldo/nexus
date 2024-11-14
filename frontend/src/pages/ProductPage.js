@@ -76,7 +76,7 @@ const ProductPage = () => {
               )}`}</label>
             </div>
             <div>
-              <label className="textParcela">Parcela(s):</label>
+              <label className="textParcela">Quantidade de Produto(s):</label>
               <input
                 type="number"
                 value={installments}
@@ -94,12 +94,13 @@ const ProductPage = () => {
 
           <div id="paypal-button-container" className="containerBtn"></div>
           <PayPalButtons
+            key={totalPrice} // Força a re-renderização ao mudar o preço
             createOrder={(data, actions) => {
               return actions.order.create({
                 purchase_units: [
                   {
                     amount: {
-                      value: totalPrice,
+                      value: totalPrice.toString(), // Converte para string para garantir o formato correto
                     },
                   },
                 ],
