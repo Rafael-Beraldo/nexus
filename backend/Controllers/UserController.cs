@@ -7,19 +7,6 @@ using MongoDB.Bson;
 
 namespace backend.Controllers
 {
-    public class UserDto
-    {
-        public string Id { get; set; }
-        public string Email { get; set; }
-        public string? FirstName { get; set; }
-        public string? LastName { get; set; }
-        public string? Street { get; set; }
-        public string? Number { get; set; }
-        public string? City { get; set; }
-        public string? ImageUrl { get; set; }
-        public string? Phone { get; set; }
-    }
-
     [ApiController]
     [Route("api/[controller]")]
     public class UserController : ControllerBase
@@ -64,7 +51,8 @@ namespace backend.Controllers
                 Number = user.Number,
                 City = user.City,
                 ImageUrl = user.ImageUrl,
-                Phone = user.Phone
+                Phone = user.Phone,
+                IsAdmin = user.IsAdmin 
             };
 
             return Ok(userDto);

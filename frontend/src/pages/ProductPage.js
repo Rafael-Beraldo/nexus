@@ -1,12 +1,15 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useContext } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./ProductPage.css";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
+import logo from "../assets/logo.png";
+import { AuthContext } from "../auth/AuthContext";
 
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
+  const { user, setUser } = useContext(AuthContext);
 
   const [product, setProduct] = useState(null);
   const [installments, setInstallments] = useState(1);
@@ -48,15 +51,26 @@ const ProductPage = () => {
 
   return (
     <PayPalScriptProvider options={initialOptions}>
-      <header className="headerProduct">
+      <div className="profile-header">
         <div style={{ paddingLeft: "2%" }}>
           <ArrowBackIcon
             fontSize="small"
             style={{ cursor: "pointer" }}
-            onClick={() => navigate(-1)}
+            onClick={() => navigate("/")}
+          />
+          <img
+            src={logo}
+            style={{
+              marginBottom: -20,
+              marginLeft: 20,
+              width: 200,
+              height: 60,
+              cursor: "pointer",
+            }}
+            onClick={() => navigate("/")}
           />
         </div>
-      </header>
+      </div>
       <div className="productPage">
         <div className="productContainer">
           <div className="imageContainer">
@@ -72,11 +86,13 @@ const ProductPage = () => {
           </div>
           <h1>{product.name}</h1>
           <p>{product.description}</p>
-          <div className="container-button">
-            <button className="btn-form" onClick={handleEdit}>
-              Editar
-            </button>
-          </div>
+          {user.isAdmin ? (
+            <div className="container-button">
+              <button className="btn-form" onClick={handleEdit}>
+                Editar
+              </button>
+            </div>
+          ) : null}
         </div>
         <div className="pagamentoContainer">
           <form>
