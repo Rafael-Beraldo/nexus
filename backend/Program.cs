@@ -39,6 +39,7 @@ builder.Services.AddSingleton<IMongoDatabase>(sp =>
 // Adiciona os serviços de Product e User
 builder.Services.AddSingleton<ProductService>();
 builder.Services.AddSingleton<UserService>();
+builder.Services.AddSingleton<OrderService>();
 
 // Configuração de autenticação JWT
 builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
