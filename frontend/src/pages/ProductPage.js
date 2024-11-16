@@ -18,14 +18,14 @@ const ProductPage = () => {
     currency: "BRL",
   };
 
-  // Carregar o produto via API
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`https://fakestoreapi.com/products/${id}`);
+        const response = await fetch(`http://localhost:5047/api/Product/${id}`);
         const data = await response.json();
+        console.log(data);
         setProduct(data);
-        setTotalPrice(data.price); // Definir o preço inicial
+        setTotalPrice(data.price);
       } catch (error) {
         console.error("Erro ao carregar produto:", error);
       }
@@ -35,13 +35,16 @@ const ProductPage = () => {
   }, [id]);
 
   useEffect(() => {
-    // Calcular o preço total baseado nas parcelas
     if (product) {
       setTotalPrice((product.price * installments).toFixed(2));
     }
   }, [installments, product]);
 
   if (!product) return <div>Carregando...</div>;
+
+  const handleEdit = () => {
+    navigate("/product/form", { state: { product } });
+  };
 
   return (
     <PayPalScriptProvider options={initialOptions}>
@@ -57,23 +60,34 @@ const ProductPage = () => {
       <div className="productPage">
         <div className="productContainer">
           <div className="imageContainer">
-            <img
-              src={product.image}
-              alt={product.title}
-              className="productImage"
-            />
+            {product.imageUrl ? (
+              <img
+                src={`http://localhost:5047/${product.imageUrl}`}
+                alt={product.name}
+                className="productImage"
+              />
+            ) : (
+              <p>Imagem não disponível</p>
+            )}
           </div>
-          <h1>{product.title}</h1>
+          <h1>{product.name}</h1>
           <p>{product.description}</p>
+          <div className="container-button">
+            <button className="btn-form" onClick={handleEdit}>
+              Editar
+            </button>
+          </div>
         </div>
         <div className="pagamentoContainer">
           <form>
             <div className="headerPayment">
               <p style={{ fontSize: 11, color: "rgba(0,0,0,0.5)" }}>Produto:</p>
-              <h1>{product.title}</h1>
-              <label className="priceProduct">{`R$${product.price.toFixed(
-                2
-              )}`}</label>
+              <h1>{product.name}</h1>
+              <label className="priceProduct">
+                {product.price !== undefined
+                  ? `R$${product.price.toFixed(2)}`
+                  : "Preço não disponível"}
+              </label>
             </div>
             <div>
               <label className="textParcela">Quantidade de Produto(s):</label>
@@ -87,20 +101,23 @@ const ProductPage = () => {
             </div>
             <div className="totalPrice">
               <p>
-                Total a pagar (em {installments} parcela(s)): R${totalPrice}
+                Total a pagar (em {installments} parcela(s)):{" "}
+                {product.price !== undefined
+                  ? `R$${totalPrice}`
+                  : "Preço não disponível"}
               </p>
             </div>
           </form>
 
           <div id="paypal-button-container" className="containerBtn"></div>
           <PayPalButtons
-            key={totalPrice} // Força a re-renderização ao mudar o preço
+            key={totalPrice}
             createOrder={(data, actions) => {
               return actions.order.create({
                 purchase_units: [
                   {
                     amount: {
-                      value: totalPrice.toString(), // Converte para string para garantir o formato correto
+                      value: totalPrice.toString(),
                     },
                   },
                 ],

@@ -4,7 +4,6 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import "./UserPage.css";
 import logo from "../assets/logo.png";
 import { AuthContext } from "../auth/AuthContext";
-import { ObjectId } from "bson";
 
 const UserPage = () => {
   const navigate = useNavigate();
@@ -32,14 +31,6 @@ const UserPage = () => {
     email: false,
   });
 
-  const nameRef = useRef();
-  const lastnameRef = useRef();
-  const streetRef = useRef();
-  const numberRef = useRef();
-  const cityRef = useRef();
-  const phoneRef = useRef();
-  const emailRef = useRef();
-
   useEffect(() => {
     const token = localStorage.getItem("token");
     if (!token) {
@@ -55,7 +46,7 @@ const UserPage = () => {
         console.log("User Data:", data);
 
         setId(data.id);
-        console.log("aa", data.id);
+        console.log("aa", data);
         setUser(data);
         setFormData(data);
       })
@@ -79,7 +70,6 @@ const UserPage = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    // Validação de dados
     let validationErrors = {
       firstName: !formData.firstName,
       lastName: !formData.lastName,
@@ -110,15 +100,15 @@ const UserPage = () => {
           Authorization: `Bearer ${token}`,
         },
         body: JSON.stringify({
-          email: "user@example.com",
+          email: user.email,
           password: "123",
-          firstName: "cleber",
-          lastName: "bambam",
-          street: "string",
-          number: "string",
-          city: "string",
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          street: formData.street,
+          number: formData.number,
+          city: formData.city,
           imageUrl: "",
-          phone: "str",
+          phone: formData.phone,
         }),
       });
 
@@ -133,11 +123,14 @@ const UserPage = () => {
     } catch (error) {
       console.error("Erro na requisição:", error);
     }
+
+    setIsEditing(false);
   };
 
   const handleLogout = () => {
     localStorage.removeItem("token");
     setUser(null);
+    navigate("/login");
   };
 
   return (
@@ -284,6 +277,20 @@ const UserPage = () => {
                 <div className="container-button2">
                   <button className="btn-form" onClick={handleEditToggle}>
                     Editar
+                  </button>
+                  <button
+                    onClick={handleLogout}
+                    style={{
+                      marginTop: 5,
+                      color: "red",
+                      fontSize: 11,
+                      fontWeight: "lighter",
+                      border: "none",
+                      background: "none",
+                      cursor: "pointer",
+                    }}
+                  >
+                    Desconectar
                   </button>
                 </div>
               </>
