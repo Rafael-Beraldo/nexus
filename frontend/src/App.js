@@ -1,7 +1,6 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import { Elements } from "@stripe/react-stripe-js";
-import getStripe from "./auth/stripeConfig";
 
 import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./service/ProtectedRoute";
@@ -12,6 +11,8 @@ import UserPage from "./pages/UserPage";
 import Cart from "./pages/Cart";
 import ProductPage from "./pages/ProductPage";
 import Login from "./pages/Login";
+import UserForm from "./pages/UserForm";
+import ProductForm from "./pages/ProductForm";
 
 function App() {
   const initialOptions = {
@@ -28,6 +29,8 @@ function App() {
             <Route path="/" element={<Home />} />
             <Route path="/login" element={<Login />} />
             <Route path="/cart" element={<Cart />} />
+            <Route path="/user/form" element={<UserForm />} />
+            <Route path="/product/form" element={<ProductForm />} />
 
             <Route
               path="/user"

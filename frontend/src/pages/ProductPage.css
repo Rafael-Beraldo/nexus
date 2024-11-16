@@ -34,8 +34,9 @@
 }
 
 .productImage {
-  width: 50vh;
-  height: 50vh;
+  display: block;
+  width: 100%;
+  height: auto;
 }
 
 .priceProduct {

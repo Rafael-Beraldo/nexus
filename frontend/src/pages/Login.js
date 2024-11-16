@@ -31,13 +31,11 @@ const Login = () => {
       const data = await response.json();
       const { token } = data;
 
-      // Armazenando o token e configurando a autenticação
       localStorage.setItem("token", token);
       console.log(localStorage.getItem("token"));
 
       setIsAuthenticated(true);
 
-      // Buscando dados do usuário logo após login
       await fetchUserData(token);
 
       // Navegando para a página de usuário
@@ -76,6 +74,10 @@ const Login = () => {
     }
   };
 
+  const createUser = () => {
+    navigate("/user/form");
+  };
+
   return (
     <div>
       <div className="profile-header" />
@@ -109,6 +111,21 @@ const Login = () => {
                 >
                   {loading ? "Carregando..." : "Entrar"}{" "}
                   {/* Altera o texto do botão durante o carregamento */}
+                </button>
+                <button
+                  type="button"
+                  onClick={createUser}
+                  style={{
+                    marginTop: 5,
+                    color: "#000000",
+                    fontSize: 11,
+                    fontWeight: "lighter",
+                    border: "none",
+                    background: "none",
+                    cursor: "pointer",
+                  }}
+                >
+                  Criar Usuário
                 </button>
                 <button
                   style={{

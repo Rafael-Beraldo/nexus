@@ -93,7 +93,6 @@ namespace backend.Controllers
         }
 
         [HttpPost]
-        [Authorize]
         public async Task<IActionResult> CreateUser(User user)
         {
             await _userService.CreateUserAsync(user);

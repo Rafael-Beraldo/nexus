@@ -4,20 +4,24 @@ import Header from "../components/Header";
 import Carousel from "../components/Carousel";
 import Section from "../components/Section";
 import Product from "../components/Product";
+import axios from "axios";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("");
+  const [loading, setLoading] = useState(true);
 
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await fetch("https://fakestoreapi.com/products");
-        const data = await response.json();
-        setProducts(data);
+        const response = await axios.get("http://localhost:5047/api/Product");
+        setProducts(response.data);
+        console.log(response.data);
+        setLoading(false);
       } catch (error) {
-        console.error("Error fetching products:", error);
+        console.error("Erro ao buscar produtos:", error);
+        setLoading(false);
       }
     };
 
@@ -36,15 +40,12 @@ const HomePage = () => {
     setSelectedCategory("");
   };
 
-  const filteredProducts = products.filter((product) => {
-    const matchesSearch = product.title
-      .toLowerCase()
-      .includes(searchTerm.toLowerCase());
-    const matchesCategory = selectedCategory
-      ? product.category === selectedCategory
-      : true;
-    return matchesSearch && matchesCategory;
-  });
+  const filteredProducts = products.filter(
+    (product) =>
+      (searchTerm === "" ||
+        product.name.toLowerCase().includes(searchTerm.toLowerCase())) &&
+      (selectedCategory === "" || product.category === selectedCategory)
+  );
 
   const halfwayIndex = Math.ceil(filteredProducts.length / 2);
   const firstHalf = filteredProducts.slice(0, halfwayIndex);
@@ -71,7 +72,9 @@ const HomePage = () => {
             </div>
           )}
 
-          {filteredProducts.length > 0 ? (
+          {loading ? (
+            <p>Carregando produtos...</p>
+          ) : filteredProducts.length > 0 ? (
             <>
               {searchTerm === "" && !selectedCategory && (
                 <>
