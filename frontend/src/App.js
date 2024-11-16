@@ -13,6 +13,7 @@ import ProductPage from "./pages/ProductPage";
 import Login from "./pages/Login";
 import UserForm from "./pages/UserForm";
 import ProductForm from "./pages/ProductForm";
+import Order from "./pages/Order";
 
 function App() {
   const initialOptions = {
@@ -31,6 +32,7 @@ function App() {
             <Route path="/cart" element={<Cart />} />
             <Route path="/user/form" element={<UserForm />} />
             <Route path="/product/form" element={<ProductForm />} />
+            <Route path="/order" element={<Order />} />
 
             <Route
               path="/user"

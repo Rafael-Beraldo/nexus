@@ -9,7 +9,7 @@ import { AuthContext } from "../auth/AuthContext";
 const ProductPage = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const { user, setUser } = useContext(AuthContext);
+  const { user, token } = useContext(AuthContext);
 
   const [product, setProduct] = useState(null);
   const [installments, setInstallments] = useState(1);
@@ -26,7 +26,6 @@ const ProductPage = () => {
       try {
         const response = await fetch(`http://localhost:5047/api/Product/${id}`);
         const data = await response.json();
-        console.log(data);
         setProduct(data);
         setTotalPrice(data.price);
       } catch (error) {
@@ -49,6 +48,23 @@ const ProductPage = () => {
     navigate("/product/form", { state: { product } });
   };
 
+  const createOrderInBackend = async (paymentDetails) => {
+    try {
+      const orderData = {
+        userId: user.id,
+        productId: product.id,
+        quantity: installments,
+        total: totalPrice,
+        paymentDetails,
+      };
+
+      alert("Transação concluída com sucesso! Pedido registrado.");
+      navigate("/orders");
+    } catch (error) {
+      console.error("Erro ao criar pedido:", error.message);
+    }
+  };
+
   return (
     <PayPalScriptProvider options={initialOptions}>
       <div className="profile-header">
@@ -60,6 +76,7 @@ const ProductPage = () => {
           />
           <img
             src={logo}
+            alt="Logo"
             style={{
               marginBottom: -20,
               marginLeft: 20,
@@ -86,7 +103,7 @@ const ProductPage = () => {
           </div>
           <h1>{product.name}</h1>
           <p>{product.description}</p>
-          {user.isAdmin ? (
+          {user && user.isAdmin ? (
             <div className="container-button">
               <button className="btn-form" onClick={handleEdit}>
                 Editar
@@ -141,7 +158,7 @@ const ProductPage = () => {
             }}
             onApprove={(data, actions) => {
               return actions.order.capture().then((details) => {
-                alert("Transação concluída com sucesso!");
+                createOrderInBackend(details);
               });
             }}
           />
