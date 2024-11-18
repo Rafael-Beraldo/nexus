@@ -46,37 +46,47 @@ namespace backend.Controllers
 
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromForm] ProductDto productDto, IFormFile? image)
-    {
-        if (image != null)
         {
-            var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
+            Console.WriteLine($"Preço recebido: {productDto.Price}");
 
-            if (!Directory.Exists("uploads"))
+            if (productDto.Price.HasValue)
             {
-                Directory.CreateDirectory("uploads");
+                decimal price = decimal.Parse(productDto.Price.Value.ToString());
+                productDto.Price = Math.Round(price, 2);
+
+                Console.WriteLine($"Preço convertido e arredondado: {productDto.Price}");
             }
 
-            using (var stream = new FileStream(imagePath, FileMode.Create))
+            if (image != null)
             {
-                await image.CopyToAsync(stream);
+                var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
+
+                if (!Directory.Exists("uploads"))
+                {
+                    Directory.CreateDirectory("uploads");
+                }
+
+                using (var stream = new FileStream(imagePath, FileMode.Create))
+                {
+                    await image.CopyToAsync(stream);
+                }
+
+                productDto.ImageUrl = imagePath;
             }
 
-            productDto.ImageUrl = imagePath;
+            var product = new Product
+            {
+                Name = productDto.Name,
+                Description = productDto.Description,
+                Price = productDto.Price ?? 0, // Se o preço for nulo, define como 0
+                Category = productDto.Category,
+                ImageUrl = productDto.ImageUrl
+            };
+
+            await _productService.CreateProductAsync(product);
+
+            return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
         }
-
-        var product = new Product
-        {
-            Name = productDto.Name,
-            Description = productDto.Description,
-            Price = productDto.Price,
-            Category = productDto.Category,
-            ImageUrl = productDto.ImageUrl
-        };
-
-        await _productService.CreateProductAsync(product);
-
-        return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
-    }
 
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromForm] ProductDto updatedProduct, IFormFile? image)

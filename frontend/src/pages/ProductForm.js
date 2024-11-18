@@ -14,7 +14,7 @@ const ProductForm = () => {
     id: productFromState?.id || "",
     name: productFromState?.name || "",
     description: productFromState?.description || "",
-    price: productFromState?.price || "",
+    price: productFromState?.price || 0,
     category: productFromState?.category || "",
     image: productFromState?.imageUrl || "",
   });
@@ -29,15 +29,35 @@ const ProductForm = () => {
     setProduct((prev) => ({ ...prev, image: file }));
   };
 
-  console.log(product.id);
+  const handlePriceInputChange = (e) => {
+    const value = e.target.value;
+
+    const formattedValue = value.replace(/[^\d,]/g, "");
+
+    setProduct((prev) => ({
+      ...prev,
+      price: formattedValue,
+    }));
+  };
 
   const handleSubmit = async (e) => {
     e.preventDefault();
 
+    let price = parseFloat(product.price.replace(",", "."));
+
+    if (isNaN(price)) {
+      alert("Preço inválido");
+      return;
+    }
+
+    price = price.toFixed(2);
+
+    price = price.replace(".", ",");
+
     const formData = new FormData();
     formData.append("Name", product.name);
     formData.append("Description", product.description);
-    formData.append("Price", product.price);
+    formData.append("Price", price);
     formData.append("Category", product.category);
 
     if (product.image) {
@@ -46,7 +66,6 @@ const ProductForm = () => {
 
     try {
       let response;
-
       if (product.id) {
         response = await axios.put(
           `http://localhost:5047/api/Product/${product.id}`,
@@ -70,7 +89,6 @@ const ProductForm = () => {
           }
         );
         alert("Produto criado com sucesso!");
-        console.log(response.data);
         navigate(`/produto/${response.data.id}`);
       }
     } catch (error) {
@@ -129,14 +147,13 @@ const ProductForm = () => {
           </div>
           <div>
             <input
-              type="number"
+              type="text"
               id="price"
               placeholder="Preço..."
               name="price"
               value={product.price}
               className="inputForm"
-              onChange={handleInputChange}
-              step="0.01"
+              onChange={handlePriceInputChange}
               required
             />
           </div>
