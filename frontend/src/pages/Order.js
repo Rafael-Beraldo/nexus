@@ -13,41 +13,43 @@ const OrderPage = () => {
   const navigate = useNavigate();
 
   useEffect(() => {
-    const fetchOrders = async () => {
-      try {
-        const response = await fetch(
-          `http://localhost:5047/api/Order/user-orders`,
-          {
-            method: "GET",
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
-
-        if (!response.ok) {
-          throw new Error("Erro ao buscar pedidos.");
-        }
-
-        const data = await response.json();
-
-        const updatedOrders = data.map((order) => {
-          const totalAmount = order.items.reduce(
-            (total, item) => total + item.price,
-            0
+    if (user && user.id) {
+      const fetchOrders = async () => {
+        try {
+          const response = await fetch(
+            `http://localhost:5047/api/Order/user/${user.id}`,
+            {
+              method: "GET",
+              headers: {
+                Authorization: `Bearer ${token}`,
+              },
+            }
           );
-          return { ...order, totalAmount };
-        });
 
-        setOrders(updatedOrders);
-      } catch (error) {
-        setError(error.message);
-      } finally {
-        setLoading(false);
-      }
-    };
+          if (!response.ok) {
+            throw new Error("Erro ao buscar pedidos.");
+          }
 
-    fetchOrders();
+          const data = await response.json();
+
+          const updatedOrders = data.map((order) => {
+            const totalAmount = order.items.reduce(
+              (total, item) => total + item.price * item.quantity,
+              0
+            );
+            return { ...order, totalAmount };
+          });
+
+          setOrders(updatedOrders);
+        } catch (error) {
+          setError(error.message);
+        } finally {
+          setLoading(false);
+        }
+      };
+
+      fetchOrders();
+    }
   }, [user, token]);
 
   return (
@@ -60,6 +62,7 @@ const OrderPage = () => {
         />
         <img
           src={logo}
+          alt="Logo"
           style={{
             marginLeft: 20,
             width: 200,
@@ -95,7 +98,7 @@ const OrderPage = () => {
                       {new Date(order.createdAt).toLocaleDateString()}
                     </p>
                     <p>
-                      <strong>Total:</strong> ${order.totalAmount}
+                      <strong>Total:</strong> R${order.totalAmount.toFixed(2)}
                     </p>
                   </div>
                   <button
