@@ -20,7 +20,6 @@ const CartPage = () => {
     currency: "BRL",
   };
 
-  // Carregar os itens do carrinho do localStorage
   useEffect(() => {
     const loadCartItems = () => {
       const cart = JSON.parse(localStorage.getItem("cart")) || [];
@@ -30,7 +29,6 @@ const CartPage = () => {
     loadCartItems();
   }, []);
 
-  // Calcular o total do carrinho
   useEffect(() => {
     const calculateTotal = () => {
       const total = cartItems.reduce(
@@ -45,36 +43,36 @@ const CartPage = () => {
 
   const createOrderInBackend = async (paymentDetails) => {
     try {
-      // Criação dos dados do pedido com base nos itens do carrinho
+      const items = cartItems.map((item) => ({
+        productId: item.id,
+        productName: item.name,
+        quantity: item.quantity,
+        price: item.price,
+      }));
+
       const orderData = {
-        userId: user.id, // Id do usuário autenticado
-        cartItems: cartItems.map((item) => ({
-          productId: item.id, // Id do produto
-          quantity: item.quantity, // Quantidade comprada
-          total: item.price * item.quantity, // Preço total por produto
-        })),
-        total: totalPrice, // Total da compra
-        paymentDetails: paymentDetails, // Detalhes do pagamento
+        userId: user.id,
+        items,
+        createdAt: new Date().toISOString(),
+        status: "AGUARDANDO",
       };
 
-      // Enviar dados para o backend via POST
       const response = await fetch("http://localhost:5047/api/Order", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`, // Enviar o token de autenticação (se necessário)
+          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify(orderData), // Converter os dados para o formato JSON
+        body: JSON.stringify(orderData),
       });
 
-      // Verificar se a resposta foi bem-sucedida
       if (!response.ok) {
         throw new Error("Erro ao criar o pedido.");
       }
 
-      // Se o pedido foi criado com sucesso, exibir mensagem e redirecionar para a página de pedidos
       alert("Transação concluída com sucesso! Pedido registrado.");
-      navigate("/orders");
+      localStorage.removeItem("cart");
+      navigate("/order");
     } catch (error) {
       console.error("Erro ao criar pedido:", error.message);
       alert("Erro ao criar o pedido. Tente novamente.");

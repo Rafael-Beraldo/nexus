@@ -17,87 +17,51 @@ namespace backend.Controllers
             _orderService = orderService;
         }
 
-        // Rota para pegar os pedidos do usuário autenticado
         [HttpGet]
-        public async Task<ActionResult<List<Order>>> GetOrders()
+        public async Task<ActionResult<List<Order>>> GetAllOrders()
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("Usuário não autenticado");
-            }
-
-            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
-
-            if (orders == null || orders.Count == 0)
-            {
-                return NotFound("Pedidos não encontrados.");
-            }
-
+            var orders = await _orderService.GetAllOrdersAsync();
             return Ok(orders);
         }
 
-        // Rota para pegar um pedido específico pelo ID, mas também associada ao usuário autenticado
         [HttpGet("{id}")]
         public async Task<ActionResult<Order>> GetOrderById(string id)
         {
-            // Obtém o userId do usuário autenticado
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
-
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("Usuário não autenticado");
-            }
-
-            // Busca o pedido com o userId e orderId
-            var order = await _orderService.GetOrderByIdAsync(id, userId);
-
+            var order = await _orderService.GetOrderByIdAsync(id);
             if (order == null)
-            {
                 return NotFound("Pedido não encontrado.");
-            }
-
             return Ok(order);
         }
 
-        [HttpGet("user-orders")] // Altere a rota para uma que reflita que estamos buscando múltiplos pedidos
-        public async Task<ActionResult<List<Order>>> GetOrdersByUserId()
+        [HttpPost]
+        public async Task<ActionResult<Order>> CreateOrder([FromBody] Order order)
         {
-            // Obtém o userId do usuário autenticado
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (order == null || order.Items == null || !order.Items.Any())
+                return BadRequest("Pedido inválido.");
 
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("Usuário não autenticado");
-            }
-
-            // Busca todos os pedidos do usuário
-            var orders = await _orderService.GetOrdersByUserIdAsync(userId);
-
-            if (orders == null || orders.Count == 0)
-            {
-                return NotFound("Nenhum pedido encontrado.");
-            }
-
-            return Ok(orders); // Retorna todos os pedidos do usuário
+            var createdOrder = await _orderService.CreateOrderAsync(order);
+            return CreatedAtAction(nameof(GetOrderById), new { id = createdOrder.Id }, createdOrder);
         }
 
-        // Rota para criar um pedido, associando ao ID do usuário
-        [HttpPost]
-        public async Task<IActionResult> CreateOrder(Order order)
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateOrder(string id, [FromBody] Order updatedOrder)
         {
-            var userId = User.FindFirst(ClaimTypes.NameIdentifier)?.Value;
+            if (updatedOrder == null || updatedOrder.Id != id)
+                return BadRequest("Dados inválidos para atualização.");
 
-            if (string.IsNullOrEmpty(userId))
-            {
-                return Unauthorized("Usuário não autenticado");
-            }
+            var isUpdated = await _orderService.UpdateOrderAsync(id, updatedOrder);
+            if (!isUpdated)
+                return NotFound("Pedido não encontrado.");
+            return NoContent();
+        }
 
-            order.UserId = userId; // Associa o pedido ao usuário autenticado
-            await _orderService.CreateOrderAsync(order);
-
-            return CreatedAtAction(nameof(GetOrderById), new { id = order.Id }, order);
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteOrder(string id)
+        {
+            var isDeleted = await _orderService.DeleteOrderAsync(id);
+            if (!isDeleted)
+                return NotFound("Pedido não encontrado.");
+            return NoContent();
         }
     }
 }

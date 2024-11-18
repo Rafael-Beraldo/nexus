@@ -8,19 +8,15 @@ const Product = (props) => {
     return <div>Produto não encontrado</div>;
   }
 
-  // Os campos são baseados na estrutura da sua nova API
   const { imageUrl, name, price, id } = props.product;
 
-  // Truncar o nome do produto para exibição
   const truncateName = (name) => {
-    // Verifica se o nome é uma string válida antes de acessar a propriedade length
     if (!name) {
-      return ""; // Retorna uma string vazia caso o nome seja null ou undefined
+      return "";
     }
     return name.length > 15 ? `${name.slice(0, 12)}...` : name;
   };
 
-  // Adicionar o produto ao carrinho
   const addToCart = async () => {
     try {
       const existingCart = await AsyncStorage.getItem("cart");

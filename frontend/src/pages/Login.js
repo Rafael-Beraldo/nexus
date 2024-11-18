@@ -9,12 +9,12 @@ const Login = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState(null);
-  const [loading, setLoading] = useState(false); // Variável de loading
+  const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
   const handleLogin = async (e) => {
     e.preventDefault();
-    setLoading(true); // Ativa o loading durante o processo de login
+    setLoading(true);
     try {
       const response = await fetch("http://localhost:5047/api/User/login", {
         method: "POST",
@@ -38,12 +38,11 @@ const Login = () => {
 
       await fetchUserData(token);
 
-      // Navegando para a página de usuário
       navigate("/user");
     } catch (error) {
       setError(error.message);
     } finally {
-      setLoading(false); // Desativa o loading
+      setLoading(false);
     }
   };
 
@@ -57,20 +56,18 @@ const Login = () => {
       });
 
       const responseData = await response.json();
-      console.log("Dados do usuário:", responseData); // Verifique os dados recebidos
+      console.log("Dados do usuário:", responseData);
 
       if (!response.ok) {
-        // A mensagem de erro da resposta pode ser útil
         throw new Error(
           responseData.message || "Erro ao buscar os dados do usuário."
         );
       }
 
-      // Se a resposta estiver correta, armazene os dados do usuário no estado
       setUser(responseData);
     } catch (error) {
       console.error("Erro ao buscar dados do usuário:", error);
-      setError(error.message); // Atualiza a mensagem de erro
+      setError(error.message);
     }
   };
 
@@ -104,13 +101,8 @@ const Login = () => {
                 required
               />
               <div className="container-button">
-                <button
-                  className="btn-form"
-                  type="submit"
-                  disabled={loading} // Desativa o botão enquanto carrega
-                >
+                <button className="btn-form" type="submit" disabled={loading}>
                   {loading ? "Carregando..." : "Entrar"}{" "}
-                  {/* Altera o texto do botão durante o carregamento */}
                 </button>
                 <button
                   type="button"

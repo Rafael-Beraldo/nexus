@@ -1,28 +1,25 @@
 import React, { createContext, useState, useEffect } from "react";
 
-// Criação do contexto de autenticação
 export const AuthContext = createContext();
 
 export const AuthProvider = ({ children }) => {
-  const [user, setUser] = useState(null); // Estado do usuário
-  const [isAuthenticated, setIsAuthenticated] = useState(false); // Estado de autenticação
+  const [user, setUser] = useState(null);
+  const [isAuthenticated, setIsAuthenticated] = useState(false);
   const [token, setToken] = useState(localStorage.getItem("token") || null);
 
-  // Verifica se o token existe no localStorage ao inicializar o contexto
   useEffect(() => {
     const token = localStorage.getItem("token");
 
     if (token) {
       setToken(token);
       setIsAuthenticated(true);
-      fetchUserData(token); // Busca os dados do usuário com o token
+      fetchUserData(token);
     } else {
       setIsAuthenticated(false);
       setUser(null);
     }
   }, []);
 
-  // Função para buscar os dados do usuário com base no token
   const fetchUserData = async (token) => {
     try {
       const response = await fetch("http://localhost:5047/api/User/me", {
@@ -39,25 +36,25 @@ export const AuthProvider = ({ children }) => {
         );
       }
 
-      setUser(responseData); // Armazena os dados do usuário no estado
+      setUser(responseData);
     } catch (error) {
       console.error("Erro ao buscar dados do usuário:", error);
-      setIsAuthenticated(false); // Caso haja erro, desautentica o usuário
-      setUser(null); // Limpa os dados do usuário
+      setIsAuthenticated(false);
+      setUser(null);
     }
   };
 
   const login = (newToken, userData) => {
-    setToken(newToken); // Define o novo token
-    localStorage.setItem("token", newToken); // Armazena o token no localStorage
+    setToken(newToken);
+    localStorage.setItem("token", newToken);
     setIsAuthenticated(true);
-    setUser(userData); // Define os dados do usuário
+    setUser(userData);
   };
 
   const logout = () => {
-    localStorage.removeItem("token"); // Remove o token do localStorage
+    localStorage.removeItem("token");
     setIsAuthenticated(false);
-    setUser(null); // Limpa os dados do usuário
+    setUser(null);
     setToken(null);
   };
 
