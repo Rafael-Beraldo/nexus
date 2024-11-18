@@ -44,7 +44,7 @@ namespace backend.Services
                 issuer: "backend",
                 audience: "frontend",
                 claims: claims,
-                expires: DateTime.Now.AddHours(1),
+                expires: DateTime.Now.AddHours(24),
                 signingCredentials: credentials
             );
 
