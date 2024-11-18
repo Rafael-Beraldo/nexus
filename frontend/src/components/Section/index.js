@@ -10,7 +10,7 @@ const mapCategoriesToPortuguese = (categories) => {
 
 const Section = ({ onCategorySelect }) => {
   const categories = [
-    { apiCategory: "electronics", displayName: "Eletrônicos" },
+    { apiCategory: "Smartphone", displayName: "Celulares" },
     { apiCategory: "jewelery", displayName: "Joias" },
     { apiCategory: "men's clothing", displayName: "Roupas Masculinas" },
     { apiCategory: "women's clothing", displayName: "Roupas Femininas" },

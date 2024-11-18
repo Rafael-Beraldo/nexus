@@ -13,7 +13,7 @@ import Login from "./pages/Login";
 import UserForm from "./pages/UserForm";
 import ProductForm from "./pages/ProductForm";
 import Order from "./pages/Order";
-
+import OrderDetail from "./pages/OrderDetail";
 function App() {
   const initialOptions = {
     clientId:
@@ -32,6 +32,7 @@ function App() {
             <Route path="/user/form" element={<UserForm />} />
             <Route path="/product/form" element={<ProductForm />} />
             <Route path="/order" element={<Order />} />
+            <Route path="/order/:id" element={<OrderDetail />} />
 
             <Route
               path="/user"

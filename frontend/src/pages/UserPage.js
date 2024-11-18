@@ -279,6 +279,14 @@ const UserPage = () => {
                     Editar
                   </button>
                   <button
+                    className="btn-form marginTop"
+                    onClick={() => {
+                      navigate("/order");
+                    }}
+                  >
+                    Pedidos
+                  </button>
+                  <button
                     onClick={handleLogout}
                     style={{
                       marginTop: 5,
@@ -291,14 +299,6 @@ const UserPage = () => {
                     }}
                   >
                     Desconectar
-                  </button>
-                  <button
-                    className="btn-form"
-                    onClick={() => {
-                      navigate("/order");
-                    }}
-                  >
-                    Pedidos
                   </button>
                 </div>
               </>
