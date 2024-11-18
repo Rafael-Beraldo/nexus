@@ -60,25 +60,27 @@ const CartPage = () => {
         userId: user.id,
         items,
         createdAt: new Date().toISOString(),
-        status: "AGUARDANDO",
+        status: "APROVADO",
       };
 
-      const response = await fetch("http://localhost:5047/api/Order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
+      if (user && user.id) {
+        const response = await fetch("http://localhost:5047/api/Order", {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
+        });
 
-      if (!response.ok) {
-        throw new Error("Erro ao criar o pedido.");
+        if (!response.ok) {
+          throw new Error("Erro ao criar o pedido.");
+        }
+
+        alert("Transação concluída com sucesso! Pedido registrado.");
+        localStorage.removeItem("cart");
+        navigate("/order");
       }
-
-      alert("Transação concluída com sucesso! Pedido registrado.");
-      localStorage.removeItem("cart");
-      navigate("/order");
     } catch (error) {
       console.error("Erro ao criar pedido:", error.message);
       alert("Erro ao criar o pedido. Tente novamente.");
@@ -169,7 +171,7 @@ const CartPage = () => {
               purchase_units: [
                 {
                   amount: {
-                    value: totalPrice.toString(),
+                    value: totalPrice.toFixed(2), // Corrigido para garantir que tenha duas casas decimais
                   },
                 },
               ],
