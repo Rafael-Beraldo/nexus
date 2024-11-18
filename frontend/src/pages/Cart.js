@@ -87,7 +87,33 @@ const CartPage = () => {
     }
   };
 
-  if (cartItems.length === 0) return <div>Seu carrinho está vazio</div>;
+  if (cartItems.length === 0)
+    return (
+      <>
+        <div className="profile-header">
+          <div style={{ paddingLeft: "2%" }}>
+            <ArrowBackIcon
+              fontSize="small"
+              style={{ cursor: "pointer" }}
+              onClick={() => navigate("/")}
+            />
+            <img
+              src={logo}
+              alt="Logo"
+              style={{
+                marginBottom: -20,
+                marginLeft: 20,
+                width: 200,
+                height: 60,
+                cursor: "pointer",
+              }}
+              onClick={() => navigate("/")}
+            />
+          </div>
+        </div>
+        <div>Seu carrinho está vazio</div>
+      </>
+    );
 
   return (
     <PayPalScriptProvider options={initialOptions}>
