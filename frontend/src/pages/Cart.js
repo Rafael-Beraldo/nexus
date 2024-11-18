@@ -1,6 +1,7 @@
 import React, { useEffect, useState, useContext } from "react";
 import { useNavigate } from "react-router-dom";
 import ArrowBackIcon from "@mui/icons-material/ArrowBack";
+import DeleteIcon from "@mui/icons-material/Delete";
 import "./Cart.css";
 import { PayPalScriptProvider, PayPalButtons } from "@paypal/react-paypal-js";
 import logo from "../assets/logo.png";
@@ -11,7 +12,6 @@ const CartPage = () => {
   const { user, token } = useContext(AuthContext);
 
   const [cartItems, setCartItems] = useState([]);
-  const [installments, setInstallments] = useState(1);
   const [totalPrice, setTotalPrice] = useState(0);
 
   const initialOptions = {
@@ -40,6 +40,12 @@ const CartPage = () => {
 
     calculateTotal();
   }, [cartItems]);
+
+  const handleRemoveItem = (id) => {
+    const updatedCart = cartItems.filter((item) => item.id !== id);
+    setCartItems(updatedCart);
+    localStorage.setItem("cart", JSON.stringify(updatedCart));
+  };
 
   const createOrderInBackend = async (paymentDetails) => {
     try {
@@ -142,6 +148,10 @@ const CartPage = () => {
                     min="1"
                   />
                 </div>
+                <DeleteIcon
+                  className="removeButton"
+                  onClick={() => handleRemoveItem(item.id)}
+                />
               </div>
             </div>
           ))}
