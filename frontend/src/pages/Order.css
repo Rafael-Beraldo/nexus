@@ -45,23 +45,8 @@ h2 {
 .status {
   padding: 5px 10px;
   border-radius: 5px;
-  font-size: 14px;
+  font-size: 8px;
   font-weight: bold;
-}
-
-.status.pending {
-  background-color: #f0ad4e;
-  color: white;
-}
-
-.status.completed {
-  background-color: #5bc0de;
-  color: white;
-}
-
-.status.canceled {
-  background-color: #d9534f;
-  color: white;
 }
 
 .order-details p {
