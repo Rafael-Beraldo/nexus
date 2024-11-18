@@ -47,10 +47,6 @@ const HomePage = () => {
       (selectedCategory === "" || product.category === selectedCategory)
   );
 
-  const halfwayIndex = Math.ceil(filteredProducts.length / 2);
-  const firstHalf = filteredProducts.slice(0, halfwayIndex);
-  const secondHalf = filteredProducts.slice(halfwayIndex);
-
   return (
     <div>
       <Header onSearch={handleSearch} />
@@ -78,8 +74,7 @@ const HomePage = () => {
             <>
               {searchTerm === "" && !selectedCategory && (
                 <>
-                  <Carousel products={firstHalf} />
-                  <Carousel products={secondHalf} />
+                  <Carousel products={filteredProducts} />
                 </>
               )}
               <div className={commonStyles.productList}>
