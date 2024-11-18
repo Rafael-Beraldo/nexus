@@ -2,7 +2,6 @@ import React, { useEffect } from "react";
 
 const PayPalButton = () => {
   useEffect(() => {
-    // Carregar o script do PayPal
     const script = document.createElement("script");
     script.src =
       "https://www.paypal.com/sdk/js?client-id=AaKfNymjl48o2itp9lUil3FuP80HdjrFAd_yk6YQofIETcAPirvuYrwXRuVxW_nZXIJHCGTMFdpu5XGA";

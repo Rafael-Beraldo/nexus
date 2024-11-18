@@ -24,7 +24,6 @@ namespace backend.Controllers
             _productService = productService;
         }
 
-        // GET: api/Product
         [HttpGet]
         public async Task<ActionResult<List<Product>>> GetProducts()
         {
@@ -32,7 +31,6 @@ namespace backend.Controllers
             return Ok(products);
         }
 
-        // GET: api/Product/{id}
         [HttpGet("{id}")]
         public async Task<ActionResult<Product>> GetProductById(string id)
         {
@@ -46,32 +44,26 @@ namespace backend.Controllers
             return Ok(product);
         }
 
-        // POST: api/Product
         [HttpPost]
         public async Task<IActionResult> CreateProduct([FromForm] ProductDto productDto, IFormFile? image)
     {
         if (image != null)
         {
-            // Gera um caminho único para a imagem
             var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
 
-            // Cria a pasta 'uploads' se ela não existir
             if (!Directory.Exists("uploads"))
             {
                 Directory.CreateDirectory("uploads");
             }
 
-            // Salva a imagem no servidor
             using (var stream = new FileStream(imagePath, FileMode.Create))
             {
                 await image.CopyToAsync(stream);
             }
 
-            // Define o caminho da imagem no produto
             productDto.ImageUrl = imagePath;
         }
 
-        // Cria uma instância de Product com os dados recebidos
         var product = new Product
         {
             Name = productDto.Name,
@@ -81,13 +73,11 @@ namespace backend.Controllers
             ImageUrl = productDto.ImageUrl
         };
 
-        // Salva o produto no banco de dados
         await _productService.CreateProductAsync(product);
 
         return CreatedAtAction(nameof(GetProductById), new { id = product.Id }, product);
     }
 
-        // PUT: api/Product/{id}
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateProduct(string id, [FromForm] ProductDto updatedProduct, IFormFile? image)
         {
@@ -100,7 +90,6 @@ namespace backend.Controllers
 
             if (image != null)
             {
-                // Processa a imagem
                 var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
 
                 if (!Directory.Exists("uploads"))
@@ -116,7 +105,6 @@ namespace backend.Controllers
                 updatedProduct.ImageUrl = imagePath;
             }
 
-            // Atualiza os dados do produto
             product.Name = updatedProduct.Name ?? product.Name;
             product.Description = updatedProduct.Description ?? product.Description;
             product.Price = updatedProduct.Price ?? product.Price;
@@ -128,7 +116,6 @@ namespace backend.Controllers
             return NoContent();
         }
 
-        // DELETE: api/Product/{id}
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteProduct(string id)
         {

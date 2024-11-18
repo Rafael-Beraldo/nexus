@@ -52,16 +52,36 @@ const ProductPage = () => {
     try {
       const orderData = {
         userId: user.id,
-        productId: product.id,
-        quantity: installments,
-        total: totalPrice,
-        paymentDetails,
+        items: [
+          {
+            productId: product.id,
+            productName: product.name,
+            quantity: installments,
+            price: product.price,
+          },
+        ],
+        createdAt: new Date().toISOString(),
+        status: "AGUARDANDO",
       };
 
+      const response = await fetch("http://localhost:5047/api/Order", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          Authorization: `Bearer ${token}`,
+        },
+        body: JSON.stringify(orderData),
+      });
+
+      if (!response.ok) {
+        throw new Error("Erro ao criar o pedido no backend.");
+      }
+
       alert("Transação concluída com sucesso! Pedido registrado.");
-      navigate("/orders");
+      navigate("/order");
     } catch (error) {
       console.error("Erro ao criar pedido:", error.message);
+      alert("Erro ao registrar pedido. Tente novamente.");
     }
   };
 

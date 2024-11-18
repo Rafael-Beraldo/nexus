@@ -1,5 +1,5 @@
-using MongoDB.Driver;
 using backend.Models;
+using MongoDB.Driver;
 
 namespace backend.Services
 {
@@ -12,48 +12,33 @@ namespace backend.Services
             _orders = database.GetCollection<Order>("Orders");
         }
 
-        // Buscar todos os pedidos de um usuário pelo userId
-        public async Task<List<Order>> GetOrdersByUserIdAsync(string userId)
+        public async Task<List<Order>> GetAllOrdersAsync()
         {
-            var filter = Builders<Order>.Filter.Eq(order => order.UserId, userId);
-            return await _orders.Find(filter).ToListAsync(); // Retorna todos os pedidos
+            return await _orders.Find(order => true).ToListAsync();
         }
 
-        // Buscar um pedido específico pelo id e userId
-        public async Task<Order> GetOrderByIdAsync(string orderId, string userId)
+        public async Task<Order?> GetOrderByIdAsync(string id)
         {
-            // Certifique-se de que o userId e o orderId são válidos e correspondem corretamente
-            var filter = Builders<Order>.Filter.Eq(order => order.UserId, userId);
+            return await _orders.Find(order => order.Id == id).FirstOrDefaultAsync();
+        }
 
-            var order = await _orders.Find(filter).FirstOrDefaultAsync();
-
-            // Adicione logs para verificar se a consulta retornou um resultado
-            if (order == null)
-            {
-                Console.WriteLine("Pedido não encontrado.");
-            }
-
+        public async Task<Order> CreateOrderAsync(Order order)
+        {
+            order.CreatedAt = DateTime.UtcNow; 
+            await _orders.InsertOneAsync(order);
             return order;
         }
 
-        // Criar um novo pedido
-        public async Task CreateOrderAsync(Order order)
+        public async Task<bool> UpdateOrderAsync(string id, Order updatedOrder)
         {
-            await _orders.InsertOneAsync(order);
+            var result = await _orders.ReplaceOneAsync(order => order.Id == id, updatedOrder);
+            return result.IsAcknowledged && result.ModifiedCount > 0;
         }
 
-        // Atualizar um pedido existente
-        public async Task UpdateOrderAsync(string orderId, Order updateOrder)
+        public async Task<bool> DeleteOrderAsync(string id)
         {
-            var filter = Builders<Order>.Filter.Eq(order => order.Id, orderId);
-            await _orders.ReplaceOneAsync(filter, updateOrder);
-        }
-
-        // Excluir um pedido
-        public async Task DeleteOrderAsync(string orderId)
-        {
-            var filter = Builders<Order>.Filter.Eq(order => order.Id, orderId);
-            await _orders.DeleteOneAsync(filter);
+            var result = await _orders.DeleteOneAsync(order => order.Id == id);
+            return result.IsAcknowledged && result.DeletedCount > 0;
         }
     }
 }

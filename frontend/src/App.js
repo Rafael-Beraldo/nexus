@@ -1,6 +1,5 @@
 import React from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Elements } from "@stripe/react-stripe-js";
 
 import { AuthProvider } from "./auth/AuthContext";
 import ProtectedRoute from "./service/ProtectedRoute";
