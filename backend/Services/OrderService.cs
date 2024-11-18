@@ -22,6 +22,11 @@ namespace backend.Services
             return await _orders.Find(order => order.Id == id).FirstOrDefaultAsync();
         }
 
+        public List<Order> GetOrdersByUserId(string userId)
+        {
+            return _orders.Find(order => order.UserId == userId).ToList();
+        }
+
         public async Task<Order> CreateOrderAsync(Order order)
         {
             order.CreatedAt = DateTime.UtcNow; 

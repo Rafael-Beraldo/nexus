@@ -33,6 +33,26 @@ namespace backend.Controllers
             return Ok(order);
         }
 
+        [HttpGet("user/{userId}")]
+        public IActionResult GetOrdersByUserId(string userId)
+        {
+            try
+            {
+                var orders = _orderService.GetOrdersByUserId(userId);
+
+                if (orders == null || !orders.Any())
+                {
+                    return NotFound(new { message = "Nenhum pedido encontrado para este usuário." });
+                }
+
+                return Ok(orders);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, new { message = $"Erro ao buscar pedidos: {ex.Message}" });
+            }
+        }
+
         [HttpPost]
         public async Task<ActionResult<Order>> CreateOrder([FromBody] Order order)
         {

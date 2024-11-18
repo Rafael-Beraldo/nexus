@@ -292,6 +292,14 @@ const UserPage = () => {
                   >
                     Desconectar
                   </button>
+                  <button
+                    className="btn-form"
+                    onClick={() => {
+                      navigate("/order");
+                    }}
+                  >
+                    Pedidos
+                  </button>
                 </div>
               </>
             )}
