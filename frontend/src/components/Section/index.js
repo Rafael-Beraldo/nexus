@@ -11,9 +11,9 @@ const mapCategoriesToPortuguese = (categories) => {
 const Section = ({ onCategorySelect }) => {
   const categories = [
     { apiCategory: "Smartphone", displayName: "Celulares" },
-    { apiCategory: "jewelery", displayName: "Joias" },
-    { apiCategory: "men's clothing", displayName: "Roupas Masculinas" },
-    { apiCategory: "women's clothing", displayName: "Roupas Femininas" },
+    { apiCategory: "Acessorios", displayName: "Acessórios" },
+    { apiCategory: "Roupas", displayName: "Roupas" },
+    { apiCategory: "Eletrodomesticos", displayName: "Eletrodomesticos" },
   ];
 
   const mappedCategories = mapCategoriesToPortuguese(categories);
