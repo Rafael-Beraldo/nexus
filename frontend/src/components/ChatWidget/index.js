@@ -1,12 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, useRef } from "react";
 import axios from "axios";
 import "./style.css";
 import ChatIcon from "@mui/icons-material/Chat";
+import CloseIcon from "@mui/icons-material/Close";
 
 const ChatWidget = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
   const [isOpen, setIsOpen] = useState(false);
+  const messagesEndRef = useRef(null);
+
+  const scrollToBottom = () => {
+    if (messagesEndRef.current) {
+      messagesEndRef.current.scrollIntoView({ behavior: "smooth" });
+    }
+  };
+
+  useEffect(() => {
+    scrollToBottom();
+  }, [messages]);
 
   const handleSendMessage = async () => {
     if (!input.trim()) return;
@@ -18,7 +30,7 @@ const ChatWidget = () => {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
         {
-          model: "gpt-3.5-turbo",
+          model: "ft:gpt-4o-mini-2024-07-18:personal:nexus2:ATc4FsGB",
           messages: [
             { role: "system", content: "Você é um assistente útil." },
             ...messages.map((msg) => ({
@@ -31,7 +43,7 @@ const ChatWidget = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer YOUR_OPENAI_API_KEY`,
+            Authorization: `Bearer sk-tr70xEE-dsUMeH0i7GZOFThtvBaeTmq2L16hPRcD5JT3BlbkFJGKcTNCOTjibNVfVGHdJEaoNhdcIo_Ba7hrnI6SOKAA`,
           },
         }
       );
@@ -54,8 +66,15 @@ const ChatWidget = () => {
 
   return (
     <div className={`chat-widget ${isOpen ? "open" : ""}`}>
-      <div className="chat-header" onClick={() => setIsOpen(!isOpen)}>
-        <ChatIcon />
+      <div className="chat-header">
+        <div className="chat-header-title" onClick={() => setIsOpen(!isOpen)}>
+          <ChatIcon />
+        </div>
+        {isOpen && (
+          <div className="chat-header-close" onClick={() => setIsOpen(false)}>
+            <CloseIcon />
+          </div>
+        )}
       </div>
       {isOpen && (
         <div className="chat-body">
@@ -70,6 +89,7 @@ const ChatWidget = () => {
                 {msg.text}
               </div>
             ))}
+            <div ref={messagesEndRef}></div>
           </div>
           <div className="chat-input">
             <input
