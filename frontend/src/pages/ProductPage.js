@@ -115,7 +115,7 @@ const ProductPage = () => {
               <img
                 src={`http://localhost:5047/${product.imageUrl}`}
                 alt={product.name}
-                className="productImage"
+                className="productImagem"
               />
             ) : (
               <p>Imagem não disponível</p>

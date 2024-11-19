@@ -30,13 +30,13 @@
 .imageContainer {
   margin: 0 auto;
   padding: 1%;
-  background-color: #ffffff;
+  width: 100%;
 }
 
-.productImage {
+.productImagem {
   display: block;
   width: 100%;
-  height: auto;
+  height: 70vh;
 }
 
 .priceProduct {
