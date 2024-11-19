@@ -5,6 +5,7 @@ import Carousel from "../components/Carousel";
 import Section from "../components/Section";
 import Product from "../components/Product";
 import axios from "axios";
+import ChatWidget from "../components/ChatWidget";
 
 const HomePage = () => {
   const [products, setProducts] = useState([]);
@@ -90,6 +91,8 @@ const HomePage = () => {
           )}
         </div>
       </div>
+
+      <ChatWidget />
     </div>
   );
 };
