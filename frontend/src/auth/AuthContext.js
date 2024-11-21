@@ -23,7 +23,7 @@ export const AuthProvider = ({ children }) => {
   const fetchUserData = async (token) => {
     try {
       const response = await fetch(
-        "https://nexus-backend-6us9.onrender.com/api/User/me",
+        "https://nexus-backend-latest.onrender.com//api/User/me",
         {
           method: "GET",
           headers: {

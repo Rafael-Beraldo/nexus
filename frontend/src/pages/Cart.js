@@ -65,7 +65,7 @@ const CartPage = () => {
 
       if (user && user.id) {
         const response = await fetch(
-          "https://nexus-backend-6us9.onrender.com/api/Order",
+          "https://nexus-backend-latest.onrender.com//api/Order",
           {
             method: "POST",
             headers: {
@@ -148,7 +148,7 @@ const CartPage = () => {
               <div className="imageContainer">
                 {item.imageUrl ? (
                   <img
-                    src={`https://nexus-backend-6us9.onrender.com/${item.imageUrl}`}
+                    src={`https://nexus-backend-latest.onrender.com//${item.imageUrl}`}
                     alt={item.name}
                     className="productImage"
                   />
