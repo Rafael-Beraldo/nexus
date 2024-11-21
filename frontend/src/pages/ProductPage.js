@@ -25,7 +25,7 @@ const ProductPage = () => {
     const fetchProduct = async () => {
       try {
         const response = await fetch(
-          `https://nexus-backend-6us9.onrender.com/api/Product/${id}`
+          `https://nexus-backend-latest.onrender.com/api/Product/${id}`
         );
         const data = await response.json();
         setProduct(data);
@@ -67,7 +67,7 @@ const ProductPage = () => {
       };
 
       const response = await fetch(
-        "https://nexus-backend-6us9.onrender.com/api/Order",
+        "https://nexus-backend-latest.onrender.com/api/Order",
         {
           method: "POST",
           headers: {
@@ -118,7 +118,7 @@ const ProductPage = () => {
           <div className="imageContainer">
             {product.imageUrl ? (
               <img
-                src={`https://nexus-backend-6us9.onrender.com/${product.imageUrl}`}
+                src={`https://nexus-backend-latest.onrender.com/${product.imageUrl}`}
                 alt={product.name}
                 className="productImagem"
               />

@@ -53,18 +53,13 @@ namespace backend.Controllers
             {
                 decimal price = decimal.Parse(productDto.Price.Value.ToString());
                 productDto.Price = Math.Round(price, 2);
-
                 Console.WriteLine($"Preço convertido e arredondado: {productDto.Price}");
             }
 
             if (image != null)
             {
-                var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
-
-                if (!Directory.Exists("uploads"))
-                {
-                    Directory.CreateDirectory("uploads");
-                }
+                // Usando /tmp em vez de uploads
+                var imagePath = Path.Combine("/tmp/uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
 
                 using (var stream = new FileStream(imagePath, FileMode.Create))
                 {
@@ -78,7 +73,7 @@ namespace backend.Controllers
             {
                 Name = productDto.Name,
                 Description = productDto.Description,
-                Price = productDto.Price ?? 0, // Se o preço for nulo, define como 0
+                Price = productDto.Price ?? 0, 
                 Category = productDto.Category,
                 ImageUrl = productDto.ImageUrl
             };
@@ -100,12 +95,8 @@ namespace backend.Controllers
 
             if (image != null)
             {
-                var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
-
-                if (!Directory.Exists("uploads"))
-                {
-                    Directory.CreateDirectory("uploads");
-                }
+                // Usando /tmp em vez de uploads
+                var imagePath = Path.Combine("/tmp", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
 
                 using (var stream = new FileStream(imagePath, FileMode.Create))
                 {
