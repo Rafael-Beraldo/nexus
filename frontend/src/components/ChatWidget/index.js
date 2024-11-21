@@ -43,7 +43,7 @@ const ChatWidget = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer sk-tr70xEE-dsUMeH0i7GZOFThtvBaeTmq2L16hPRcD5JT3BlbkFJGKcTNCOTjibNVfVGHdJEaoNhdcIo_Ba7hrnI6SOKAA`,
+            Authorization: `Bearer sk-xZBm-ZWFn3hc1ibrQaspqB67PyJlsgyOUqN9c8ztnHT3BlbkFJjGGwrf2eqRSaeUwuoKYN1EnN9LJu1IPGHDWbLKkUAA`,
           },
         }
       );
