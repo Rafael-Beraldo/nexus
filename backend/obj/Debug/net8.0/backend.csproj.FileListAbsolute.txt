@@ -65,3 +65,7 @@ C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Microsoft.Extensions.Lo
 C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Microsoft.Extensions.Logging.Abstractions.dll
 C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\Microsoft.Extensions.Options.dll
 C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\System.Diagnostics.DiagnosticSource.dll
+C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\global.json
+C:\Users\Rafaelbe\Desktop\nexus\backend\bin\Debug\net8.0\backend.staticwebassets.endpoints.json
+C:\Users\Rafaelbe\Desktop\nexus\backend\obj\Debug\net8.0\staticwebassets.build.endpoints.json
+C:\Users\Rafaelbe\Desktop\nexus\backend\obj\Debug\net8.0\staticwebassets\msbuild.backend.Microsoft.AspNetCore.StaticWebAssetEndpoints.props
