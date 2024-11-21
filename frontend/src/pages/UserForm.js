@@ -21,23 +21,26 @@ const UserForm = (props) => {
     e.preventDefault();
 
     try {
-      const response = await fetch(`http://localhost:5047/api/User`, {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({
-          email,
-          password,
-          firstName,
-          lastName,
-          street,
-          number,
-          city,
-          imageUrl,
-          phone,
-        }),
-      });
+      const response = await fetch(
+        `https://nexus-backend-6us9.onrender.com/api/User`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({
+            email,
+            password,
+            firstName,
+            lastName,
+            street,
+            number,
+            city,
+            imageUrl,
+            phone,
+          }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao realizar login. Verifique suas credenciais.");

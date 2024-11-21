@@ -22,12 +22,15 @@ export const AuthProvider = ({ children }) => {
 
   const fetchUserData = async (token) => {
     try {
-      const response = await fetch("http://localhost:5047/api/User/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://nexus-backend-6us9.onrender.com/api/User/me",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
       const responseData = await response.json();
 
       if (!response.ok) {

@@ -64,14 +64,17 @@ const CartPage = () => {
       };
 
       if (user && user.id) {
-        const response = await fetch("http://localhost:5047/api/Order", {
-          method: "POST",
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-          body: JSON.stringify(orderData),
-        });
+        const response = await fetch(
+          "https://nexus-backend-6us9.onrender.com/api/Order",
+          {
+            method: "POST",
+            headers: {
+              "Content-Type": "application/json",
+              Authorization: `Bearer ${token}`,
+            },
+            body: JSON.stringify(orderData),
+          }
+        );
 
         if (!response.ok) {
           throw new Error("Erro ao criar o pedido.");
@@ -145,7 +148,7 @@ const CartPage = () => {
               <div className="imageContainer">
                 {item.imageUrl ? (
                   <img
-                    src={`http://localhost:5047/${item.imageUrl}`}
+                    src={`https://nexus-backend-6us9.onrender.com/${item.imageUrl}`}
                     alt={item.name}
                     className="productImage"
                   />

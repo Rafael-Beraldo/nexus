@@ -38,7 +38,7 @@ const UserPage = () => {
       return;
     }
 
-    fetch("http://localhost:5047/api/User/me", {
+    fetch("https://nexus-backend-6us9.onrender.com/api/User/me", {
       headers: { Authorization: `Bearer ${token}` },
     })
       .then((response) => response.json())
@@ -93,24 +93,27 @@ const UserPage = () => {
     }
 
     try {
-      const response = await fetch(`http://localhost:5047/api/User/${id}`, {
-        method: "PUT",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify({
-          email: user.email,
-          password: "123",
-          firstName: formData.firstName,
-          lastName: formData.lastName,
-          street: formData.street,
-          number: formData.number,
-          city: formData.city,
-          imageUrl: "",
-          phone: formData.phone,
-        }),
-      });
+      const response = await fetch(
+        `https://nexus-backend-6us9.onrender.com/api/User/${id}`,
+        {
+          method: "PUT",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify({
+            email: user.email,
+            password: "123",
+            firstName: formData.firstName,
+            lastName: formData.lastName,
+            street: formData.street,
+            number: formData.number,
+            city: formData.city,
+            imageUrl: "",
+            phone: formData.phone,
+          }),
+        }
+      );
 
       if (response.status === 204) {
         console.log("Usuário atualizado com sucesso");

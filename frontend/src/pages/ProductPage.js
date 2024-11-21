@@ -24,7 +24,9 @@ const ProductPage = () => {
   useEffect(() => {
     const fetchProduct = async () => {
       try {
-        const response = await fetch(`http://localhost:5047/api/Product/${id}`);
+        const response = await fetch(
+          `https://nexus-backend-6us9.onrender.com/api/Product/${id}`
+        );
         const data = await response.json();
         setProduct(data);
         setTotalPrice(data.price);
@@ -64,14 +66,17 @@ const ProductPage = () => {
         status: "AGUARDANDO",
       };
 
-      const response = await fetch("http://localhost:5047/api/Order", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
-        },
-        body: JSON.stringify(orderData),
-      });
+      const response = await fetch(
+        "https://nexus-backend-6us9.onrender.com/api/Order",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+          body: JSON.stringify(orderData),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao criar o pedido no backend.");
@@ -113,7 +118,7 @@ const ProductPage = () => {
           <div className="imageContainer">
             {product.imageUrl ? (
               <img
-                src={`http://localhost:5047/${product.imageUrl}`}
+                src={`https://nexus-backend-6us9.onrender.com/${product.imageUrl}`}
                 alt={product.name}
                 className="productImagem"
               />

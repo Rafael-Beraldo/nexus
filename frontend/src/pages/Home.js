@@ -16,7 +16,9 @@ const HomePage = () => {
   useEffect(() => {
     const fetchProducts = async () => {
       try {
-        const response = await axios.get("http://localhost:5047/api/Product");
+        const response = await axios.get(
+          "https://nexus-backend-6us9.onrender.com/api/Product"
+        );
         setProducts(response.data);
         console.log(response.data);
         setLoading(false);
