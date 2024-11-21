@@ -68,7 +68,7 @@ const ProductForm = () => {
       let response;
       if (product.id) {
         response = await axios.put(
-          `http://localhost:5047/api/Product/${product.id}`,
+          `https://nexus-backend-6us9.onrender.com/api/Product/${product.id}`,
           formData,
           {
             headers: {
@@ -80,7 +80,7 @@ const ProductForm = () => {
         navigate(`/produto/${product.id}`);
       } else {
         response = await axios.post(
-          "http://localhost:5047/api/Product",
+          "https://nexus-backend-6us9.onrender.com/api/Product",
           formData,
           {
             headers: {

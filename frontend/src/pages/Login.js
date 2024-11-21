@@ -16,13 +16,16 @@ const Login = () => {
     e.preventDefault();
     setLoading(true);
     try {
-      const response = await fetch("http://localhost:5047/api/User/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+      const response = await fetch(
+        "https://nexus-backend-6us9.onrender.comapi/User/login",
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ email, password }),
+        }
+      );
 
       if (!response.ok) {
         throw new Error("Erro ao realizar login. Verifique suas credenciais.");
@@ -48,12 +51,15 @@ const Login = () => {
 
   const fetchUserData = async (token) => {
     try {
-      const response = await fetch("http://localhost:5047/api/User/me", {
-        method: "GET",
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await fetch(
+        "https://nexus-backend-6us9.onrender.com/api/User/me",
+        {
+          method: "GET",
+          headers: {
+            Authorization: `Bearer ${token}`,
+          },
+        }
+      );
 
       const responseData = await response.json();
       console.log("Dados do usuário:", responseData);
