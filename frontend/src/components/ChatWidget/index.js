@@ -25,7 +25,9 @@ const ChatWidget = () => {
 
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
-  
+
+    console.log(process.env.REACT_APP_OPENAI_API_KEY);
+
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
@@ -37,7 +39,7 @@ const ChatWidget = () => {
               content:
                 "Você é um assistente especializado da Nexus Store. Responda apenas com informações relacionadas à loja, como produtos, devoluções, formas de pagamento e rastreamento de pedidos. Caso a pergunta esteja fora do escopo, diga: 'Desculpe, só consigo ajudar com assuntos relacionados à Nexus Store.'",
             },
-            
+
             { role: "user", content: input },
           ],
           max_tokens: 150,
@@ -46,12 +48,11 @@ const ChatWidget = () => {
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization:
-              "Bearer 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",
+            Authorization: `Bearer ${process.env.REACT_APP_OPENAI_API_KEY}`,
           },
         }
       );
-  
+
       const assistantMessage = {
         sender: "assistant",
         text: response.data.choices[0].message.content,
@@ -59,7 +60,7 @@ const ChatWidget = () => {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
-  
+
       setMessages((prev) => [
         ...prev,
         { sender: "assistant", text: "Desculpe, algo deu errado." },
@@ -68,6 +69,10 @@ const ChatWidget = () => {
 
     setInput("");
   };
+
+  useEffect(() => {
+    console.log(process.env.REACT_APP_OPENAI_API_KEY);
+  }, []);
 
   return (
     <div className={`chat-widget ${isOpen ? "open" : ""}`}>
