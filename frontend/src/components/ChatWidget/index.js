@@ -25,29 +25,33 @@ const ChatWidget = () => {
 
     const userMessage = { sender: "user", text: input };
     setMessages((prev) => [...prev, userMessage]);
-
+  
     try {
       const response = await axios.post(
         "https://api.openai.com/v1/chat/completions",
         {
           model: "ft:gpt-4o-mini-2024-07-18:personal:nexus2:ATc4FsGB",
           messages: [
-            { role: "system", content: "Você é um assistente útil." },
-            ...messages.map((msg) => ({
-              role: msg.sender === "user" ? "user" : "assistant",
-              content: msg.text,
-            })),
+            {
+              role: "system",
+              content:
+                "Você é um assistente especializado da Nexus Store. Responda apenas com informações relacionadas à loja, como produtos, devoluções, formas de pagamento e rastreamento de pedidos. Caso a pergunta esteja fora do escopo, diga: 'Desculpe, só consigo ajudar com assuntos relacionados à Nexus Store.'",
+            },
+            
             { role: "user", content: input },
           ],
+          max_tokens: 150,
+          temperature: 0.3,
         },
         {
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer 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`,
+            Authorization:
+              "Bearer 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",
           },
         }
       );
-
+  
       const assistantMessage = {
         sender: "assistant",
         text: response.data.choices[0].message.content,
@@ -55,6 +59,7 @@ const ChatWidget = () => {
       setMessages((prev) => [...prev, assistantMessage]);
     } catch (error) {
       console.error("Erro ao enviar mensagem:", error);
+  
       setMessages((prev) => [
         ...prev,
         { sender: "assistant", text: "Desculpe, algo deu errado." },
