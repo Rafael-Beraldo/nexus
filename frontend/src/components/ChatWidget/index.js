@@ -70,10 +70,6 @@ const ChatWidget = () => {
     setInput("");
   };
 
-  useEffect(() => {
-    console.log(process.env.REACT_APP_OPENAI_API_KEY);
-  }, []);
-
   return (
     <div className={`chat-widget ${isOpen ? "open" : ""}`}>
       <div className="chat-header">
