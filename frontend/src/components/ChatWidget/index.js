@@ -32,7 +32,7 @@ const ChatWidget = () => {
         {
           model: "ft:gpt-4o-mini-2024-07-18:personal:nexus2:ATc4FsGB",
           messages: [
-            { role: "system", content: "Você é um assistente de e-commerce da Nexus Store." },
+            { role: "system", content: "Você é um assistente útil." },
             ...messages.map((msg) => ({
               role: msg.sender === "user" ? "user" : "assistant",
               content: msg.text,
