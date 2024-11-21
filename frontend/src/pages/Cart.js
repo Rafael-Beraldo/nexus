@@ -65,7 +65,7 @@ const CartPage = () => {
 
       if (user && user.id) {
         const response = await fetch(
-          "https://nexus-backend-latest.onrender.com//api/Order",
+          "https://nexus-backend-latest.onrender.com/api/Order",
           {
             method: "POST",
             headers: {
