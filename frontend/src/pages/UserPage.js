@@ -163,7 +163,7 @@ const UserPage = () => {
           <h1>Ficha do Usuário:</h1>
           <div className="profile-settings">
             <img
-              src={user.imageUrl || "https://via.placeholder.com/150"}
+              src={"https://via.placeholder.com/150"}
               alt="Foto de Perfil"
               className="profile-picture"
             />
