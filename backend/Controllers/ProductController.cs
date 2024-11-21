@@ -10,7 +10,7 @@ namespace backend.Controllers
         public string? Description { get; set; }
         public decimal? Price { get; set; }
         public string? Category { get; set; }
-        public string? ImageUrl { get; set; } 
+        public string? ImageUrl { get; set; }
     }
 
     [ApiController]
@@ -58,22 +58,21 @@ namespace backend.Controllers
 
             if (image != null)
             {
-                // Usando /tmp em vez de uploads
-                var imagePath = Path.Combine("/tmp/uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
+                var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
 
                 using (var stream = new FileStream(imagePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
 
-                productDto.ImageUrl = imagePath;
+                productDto.ImageUrl = $"/uploads/{Path.GetFileName(imagePath).Replace("\\", "/")}";
             }
 
             var product = new Product
             {
                 Name = productDto.Name,
                 Description = productDto.Description,
-                Price = productDto.Price ?? 0, 
+                Price = productDto.Price ?? 0,
                 Category = productDto.Category,
                 ImageUrl = productDto.ImageUrl
             };
@@ -95,15 +94,14 @@ namespace backend.Controllers
 
             if (image != null)
             {
-                // Usando /tmp em vez de uploads
-                var imagePath = Path.Combine("/tmp", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
+                var imagePath = Path.Combine("uploads", $"{Guid.NewGuid()}{Path.GetExtension(image.FileName)}");
 
                 using (var stream = new FileStream(imagePath, FileMode.Create))
                 {
                     await image.CopyToAsync(stream);
                 }
 
-                updatedProduct.ImageUrl = imagePath;
+                updatedProduct.ImageUrl = $"/uploads/{Path.GetFileName(imagePath).Replace("\\", "/")}";
             }
 
             product.Name = updatedProduct.Name ?? product.Name;
