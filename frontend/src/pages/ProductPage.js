@@ -157,14 +157,6 @@ const ProductPage = () => {
                 min="1"
               />
             </div>
-            <div className="totalPrice">
-              <p>
-                Total a pagar (em {installments} parcela(s)):{" "}
-                {product.price !== undefined
-                  ? `R$${totalPrice}`
-                  : "Preço não disponível"}
-              </p>
-            </div>
           </form>
 
           <div id="paypal-button-container" className="containerBtn"></div>
