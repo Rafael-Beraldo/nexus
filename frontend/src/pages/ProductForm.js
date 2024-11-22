@@ -45,7 +45,7 @@ const ProductForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    let price = parseFloat(product.price.replace(",", "."));
+    let price = parseFloat(product.price.replace(".", ","));
 
     if (isNaN(price)) {
       alert("Preço inválido");
