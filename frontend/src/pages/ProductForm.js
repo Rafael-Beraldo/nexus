@@ -34,9 +34,11 @@ const ProductForm = () => {
 
     const formattedValue = value.replace(/[^\d,]/g, "");
 
+    const numericValue = parseFloat(formattedValue.replace(",", "."));
+
     setProduct((prev) => ({
       ...prev,
-      price: formattedValue,
+      price: isNaN(numericValue) ? "" : formattedValue,
     }));
   };
 
@@ -50,14 +52,10 @@ const ProductForm = () => {
       return;
     }
 
-    price = price.toFixed(2);
-
-    price = price.replace(".", ",");
-
     const formData = new FormData();
     formData.append("Name", product.name);
     formData.append("Description", product.description);
-    formData.append("Price", price);
+    formData.append("Price", price.toFixed(2));
     formData.append("Category", product.category);
 
     if (product.image) {
